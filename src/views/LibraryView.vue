@@ -98,7 +98,7 @@
 
       </div>
     </ion-content>
-    <AppTabBar />
+
   </ion-page>
 </template>
 
@@ -106,7 +106,7 @@
 import { ref, watch, onMounted } from 'vue';
 import { IonPage, IonContent, IonSearchbar } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
-import AppTabBar from '@/components/AppTabBar.vue';
+
 import knowledgeSeedData from '@/data/knowledgeSeed.json';
 import { searchKnowledge, db } from '@/services/db';
 

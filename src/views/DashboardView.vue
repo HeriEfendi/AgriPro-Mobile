@@ -85,7 +85,7 @@
 
       </div>
     </ion-content>
-    <AppTabBar />
+
   </ion-page>
 </template>
 
@@ -93,7 +93,7 @@
 import { computed } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
-import AppTabBar from '@/components/AppTabBar.vue';
+
 import { useProfileStore } from '@/stores/useProfileStore';
 
 const profileStore = useProfileStore();

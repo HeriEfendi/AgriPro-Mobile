@@ -129,7 +129,7 @@
 
       </div>
     </ion-content>
-    <AppTabBar />
+
   </ion-page>
 </template>
 
@@ -137,7 +137,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
-import AppTabBar from '@/components/AppTabBar.vue';
+
 import { calculatePearsonSquare } from '@/utils/calculators/feedBlenderCalc';
 import { addBreedingLog, getAllBreedingLogs, deleteBreedingLog } from '@/services/db';
 import { scheduleNotification } from '@/services/notificationService';

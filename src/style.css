@@ -2,19 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Base Styles */
+/* Custom Base Styles & Strict Light Theme for Form Controls */
 @layer base {
+  :root {
+    color-scheme: light !important;
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    background-color: #f9fafb;
-    color: #111827;
+    background-color: #f9fafb !important;
+    color: #111827 !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #111827;
+    color: #111827 !important;
     font-weight: 700;
+  }
+
+  /* Force all native input, select, textarea controls to bright white background */
+  input, select, textarea {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #9ca3af !important;
+  }
+
+  /* Override browser autofill dark background */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: #111827 !important;
   }
 }
 
@@ -39,15 +63,19 @@
 
   /* Form Controls */
   .input-field {
-    @apply w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-agri-500 focus:border-agri-500 outline-none transition;
+    @apply w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 focus:ring-2 focus:ring-agri-500 focus:border-agri-500 outline-none transition shadow-inner;
+    background-color: #ffffff !important;
+    color: #111827 !important;
   }
 
   .select-field {
-    @apply w-full mt-1 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-agri-500 outline-none transition cursor-pointer;
+    @apply w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 focus:ring-2 focus:ring-agri-500 outline-none transition cursor-pointer;
+    background-color: #ffffff !important;
+    color: #111827 !important;
   }
 
   .label-field {
-    @apply text-xs font-semibold text-gray-700 block;
+    @apply text-xs font-bold text-gray-800 block mb-1;
   }
 
   /* Buttons */

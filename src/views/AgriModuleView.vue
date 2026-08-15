@@ -162,7 +162,7 @@
 
       </div>
     </ion-content>
-    <AppTabBar />
+
   </ion-page>
 </template>
 
@@ -170,7 +170,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
-import AppTabBar from '@/components/AppTabBar.vue';
+
 import { calculateTankDose, calculatePlantPopulation, checkChemicalCompatibility } from '@/utils/calculators/agriMixCalc';
 import { addCropSchedule, getAllCropSchedules, deleteCropSchedule } from '@/services/db';
 import { scheduleNotification } from '@/services/notificationService';

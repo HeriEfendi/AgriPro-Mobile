@@ -17,10 +17,11 @@ import {
   LineElement,
   LinearScale,
   PointElement,
-  CategoryScale
+  CategoryScale,
+  Filler
 } from 'chart.js';
 
-ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale);
+ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale, Filler);
 
 const props = defineProps({
   logs: {
@@ -43,6 +44,7 @@ const chartData = computed(() => {
         data: phData.length ? phData : [7.2, 7.5, 6.8, 7.4, 7.6],
         borderColor: '#0284c7',
         backgroundColor: 'rgba(2, 132, 199, 0.1)',
+        fill: false,
         tension: 0.3
       },
       {
@@ -50,6 +52,7 @@ const chartData = computed(() => {
         data: tempData.length ? tempData : [28.5, 29.0, 28.2, 29.5, 28.8],
         borderColor: '#f59e0b',
         backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        fill: false,
         tension: 0.3
       },
       {
@@ -57,6 +60,7 @@ const chartData = computed(() => {
         data: doData.length ? doData : [5.2, 4.8, 5.5, 5.1, 4.9],
         borderColor: '#16a34a',
         backgroundColor: 'rgba(22, 163, 74, 0.1)',
+        fill: false,
         tension: 0.3
       }
     ]
