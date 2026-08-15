@@ -1,0 +1,32 @@
+[
+  {
+    "ingredientA": "Mankozeb",
+    "ingredientB": "Abamektin",
+    "status": "SAFE",
+    "note": "Aman dicampur dalam 1 tangki. Pastikan dilarutkan satu per satu dalam wadah terpisah sebelum dimasukkan ke tangki semprot."
+  },
+  {
+    "ingredientA": "Tebuconazole",
+    "ingredientB": "Imidakloprid",
+    "status": "SAFE",
+    "note": "Kombinasi fungisida sistemik dan insektisida sistemik yang efektif untuk perlindungan ganda."
+  },
+  {
+    "ingredientA": "Tembaga Hidroksida (Copper)",
+    "ingredientB": "Insektisida Organofosfat",
+    "status": "DANGER",
+    "note": "BAHAYA! Bahan berbahan Tembaga/Copper tinggi asam tidak boleh dicampur dengan Organofosfat karena merusak efektivitas racun dan memicu fitotoksisitas (daun terbakar)."
+  },
+  {
+    "ingredientA": "Pupuk Daun Tinggi Nitrogen",
+    "ingredientB": "Fungisida Tembaga",
+    "status": "DANGER",
+    "note": "BAHAYA! Terjadi reaksi mengendap menggumpal yang dapat mengendap dan menyumbat nozel spayer."
+  },
+  {
+    "ingredientA": "Imidakloprid",
+    "ingredientB": "Emamektin Benzoat",
+    "status": "WARNING",
+    "note": "PERHATIKAN! Boleh dicampur jika tingkat serangan tinggi, namun perhatikan dosis agar tidak melebihi ambang batas kekebalan hama."
+  }
+]

@@ -16,19 +16,19 @@ Task ini disusun secara terstruktur dari pembentukan scaffolding, UI/UX, logika 
 
 ## 💾 Phase 2: Offline Database Layer (Backend-in-Browser)
 
-- [ ] **Task 2.1 Schema Dexie.js**:
+- [x] **Task 2.1 Schema Dexie.js**:
   - `profiles`: (`Role`: tani/tambak/ternak, `nama_lahan`, `unit_preference`)
   - `water_logs`: (`timestamp`, `ph`, `salinity`, `temp`, `do_level`, `pond_id`)
   - `crop_schedules`: (`id`, `crop_name`, `plant_date`, `wth_days`, `harvest_date`)
   - `breeding_logs`: (`id`, `animal_tag`, `ib_date`, `expected_birth_date`, `vaccine_status`)
   - `offline_knowledge`: (`id`, `category`, `symptom`, `solution`, `tags`)
-- [ ] **Task 2.2 Seed Data**:
-  - Buat script seed data awal untuk Pustaka Taktis Offline dan Matriks Kompatibilitas Obat dalam format JSON lokal.
-- [ ] **Task 2.3 Business Logic / Math Engines** (`src/utils/calculators/`):
-  - `agriMixCalc.js`: Rumus kalkulasi obat per tangki & validasi bahaya pencampuran.
-  - `aquaFcrCalc.js`: Rumus FCR, persentase pakan per biomassa, dan estimasi populasi.
-  - `feedBlenderCalc.js`: Algoritma sederhana Pearson Square untuk racikan ransum pakan.
-  - `unitConverter.js`: Fungsi konversi satuan tradisional ke SI.
+- [x] **Task 2.2 Seed Data**:
+  - Buat script seed data awal untuk Pustaka Taktis Offline (`knowledgeSeed.json`) dan Matriks Kompatibilitas Obat (`chemicalCompatibility.json`) dalam format JSON lokal dengan auto-seeder `seedService.js`.
+- [x] **Task 2.3 Business Logic / Math Engines** (`src/utils/calculators/`):
+  - `agriMixCalc.js`: Rumus kalkulasi obat per tangki, populasi bibit, & validasi bahaya pencampuran.
+  - `aquaFcrCalc.js`: Rumus FCR, persentase pakan harian, biomassa, dan ADG.
+  - `feedBlenderCalc.js`: Algoritma Pearson Square untuk racikan ransum pakan.
+  - `unitConverter.js`: Fungsi konversi satuan tradisional (Ubin, Bahu, Gembor, Sendok, ppm) ke SI.
 
 ---
 

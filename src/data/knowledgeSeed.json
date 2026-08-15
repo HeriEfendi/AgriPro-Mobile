@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "category": "agri",
+    "title": "Bercak Daun & Busuk Batang Padi",
+    "symptom": "Daun padi kuning kecokelatan bercak lonjong, garis kecokelatan di pelepah daun, batang bawah lembek dan berbau pembusukan.",
+    "solution": "1. Semprot fungisida berbahan aktif Mankozeb atau Tebuconazole dosis 2 g/L air.\n2. Kurangi pemupukan Nitrogen berlebih (Urea).\n3. Jaga sirkulasi air sawah agar tidak terus menggenang (pengeringan berselang).",
+    "tags": ["padi", "bercak daun", "fungisida", "busuk batang", "jamur"]
+  },
+  {
+    "id": 2,
+    "category": "agri",
+    "title": "Serangan Wereng Cokelat",
+    "symptom": "Tanaman padi mendadak menguning mengering seperti terbakar (hopperburn) melingkar di tengah petakan sawah.",
+    "solution": "1. Keringkan air sawah selama 3-5 hari.\n2. Aplikasi insektisida sistemik berbahan aktif Imidakloprid atau BPMC tepat pada pangkal batang padi.\n3. Hindari penggunaan racun kontak berbahan pyrethroid sintetik berlebih karena membunuh musuh alami.",
+    "tags": ["padi", "wereng", "imidakloprid", "hopperburn", "serangga"]
+  },
+  {
+    "id": 3,
+    "category": "agri",
+    "title": "Ulat Grayak / Freworm Jagung",
+    "symptom": "Daun jagung muda terpotong-potong, terdapat kotoran gumpalan serbuk gergaji di pucuk daun muda.",
+    "solution": "1. Aplikasi insektisida emamektin benzoat atau klorantraniliprol pada pucuk daun sore hari.\n2. Lakukan penaburan kalsium atau debu abu dapur ke pucuk jagung untuk membasmi larva.",
+    "tags": ["jagung", "ulat grayak", "spodoptera", "pucuk jagung"]
+  },
+  {
+    "id": 4,
+    "category": "agri",
+    "title": "Layu Fusarium Jagung / Cabai",
+    "symptom": "Tanaman cabai/jagung layu mendadak pada siang hari dan segar kembali malam hari, hingga akhirnya mati mendadak.",
+    "solution": "1. Cor pangkal batang dengan agens hayati Trichoderma sp.\n2. Taburi kapur pertanian (Dolomit) untuk menaikkan pH tanah hingga 6.5 - 7.0.\n3. Cabut tanaman yang terinfeksi parah dan bakar jauh dari lahan.",
+    "tags": ["cabai", "jagung", "layu fusarium", "trichoderma", "dolomit"]
+  },
+  {
+    "id": 5,
+    "category": "aqua",
+    "title": "pH Air Kolam Drop / Asam (pH < 6.5)",
+    "symptom": "Udang/ikan berenang di permukaan air, warna air menjadi sangat jernih menguning, nafsu makan pakan turun drastis.",
+    "solution": "1. Berikan Kapur Karbonat (CaCO3) atau Kapur Tawar (Dolomit) dosis 10-20 ppm secara bertahap di pagi hari.\n2. Cek kualitas air sumber dan kurangi pergantian air ekstrim saat hujan deras.",
+    "tags": ["udang", "ikan", "ph drop", "dolomit", "kapur", "air"]
+  },
+  {
+    "id": 6,
+    "category": "aqua",
+    "title": "White Spot Disease (WSSV) Udang Vaname",
+    "symptom": "Bercak putih bercabang pada cangkang carapace udang, usus kosong, udang sekarat mengapung di pinggir pematang kolam.",
+    "solution": "1. Hentikan pemberian pakan (penurunan respons feeding 50-70%).\n2. Naikkan aerasi kincir penuh 24 jam untuk menjaga DO > 4.5 mg/L.\n3. Aplikasi imuno-stimulan (Vitamin C & Beta-Glukan) melalui pakan.",
+    "tags": ["udang vaname", "white spot", "wssv", "cangkang", "penyakit udang"]
+  },
+  {
+    "id": 7,
+    "category": "aqua",
+    "title": "Bakteri Aeromonas (Pop-Eye / Borok Ikan)",
+    "symptom": "Mata ikan bengkak menonjol (pop-eye), sisik mengelupas berdarah, perut membesar (dropsy) pada ikan lele/gurami.",
+    "solution": "1. Karantina ikan sakit ke kolam terpisah.\n2. Berikan perlakuan perendaman garam krosok 1-2 kg/m3 selama 15-30 menit.\n3. Tambahkan antibiotik terdaftar (Enrofloxacin) pada pakan dosis 50 mg/kg pakan selama 5 hari berturut-turut.",
+    "tags": ["ikan lele", "gurami", "aeromonas", "borok", "garam krosok"]
+  },
+  {
+    "id": 8,
+    "category": "aqua",
+    "title": "Kadar Amonia Tinggi (NH3 > 0.5 ppm)",
+    "symptom": "Air berbau menyengat, udang/ikan menggantung di permukaan dekat kincir, insang berwarna gelap memerah.",
+    "solution": "1. Ganti air dasar kolam (siphon) sebanyak 10-20% secara perlahan.\n2. Kurangi pakan harian 30-50% sementara waktu.\n3. Tebar mikroorganisme pengurai (Probiotik Nitrifikasi / Bacillus sp.) dosis 1 ppm.",
+    "tags": ["amonia", "probiotik", "bau air", "siphon", "insang"]
+  },
+  {
+    "id": 9,
+    "category": "livestock",
+    "title": "Penyakit Mulut dan Kuku (PMK) Sapi/Kambing",
+    "symptom": "Air liur berbusa berlebihan, lepuh luka kemerahan pada lidah dan gusi, kaki pincang mengelupas dekat kuku.",
+    "solution": "1. Semprot area mulut dan kaki dengan larutan asam sitrat (Sitrun) 1% atau disinfektan steril.\n2. Berikan pakan lunak (rumput giling / bubur dedak) dan suplai vitamin B-Complex injector.\n3. Lakukan isolasi total ternak sakit dan lapor ke dinas peternakan setempat.",
+    "tags": ["sapi", "kambing", "pmk", "mulut kuku", "air liur", "pincang"]
+  },
+  {
+    "id": 10,
+    "category": "livestock",
+    "title": "Kembung Perut (Bloat / Timpani) Ruminansia",
+    "symptom": "Perut sebelah kiri sapi/kambing membesar menegang seperti drum, ternak gelisah dan sulit bernapas.",
+    "solution": "1. Cekokkan minyak goreng nabati / minyak kelapa hangat 100-200 ml (sapi) atau 30-50 ml (kambing) untuk memecah busa gas.\n2. Posisikan kaki depan lebih tinggi dari kaki belakang dan posisikan ternak berdirian.\n3. Jika darurat, panggil dokter hewan untuk penggunaan trokar trocar.",
+    "tags": ["sapi", "kambing", "bloat", "kembung", "timpani", "minyak goreng"]
+  },
+  {
+    "id": 11,
+    "category": "livestock",
+    "title": "Cacingan (Helminthiasis) pada Ternak",
+    "symptom": "Ternak kurus meskipun makan lahap, bulu kusam berdiri, mata berair mengotor, feses kadang lembek berlendir.",
+    "solution": "1. Berikan obat cacing berbahan aktif Albendazole atau Wormectin dosis rutin setiap 3-4 bulan sekali.\n2. Gembalakan ternak setelah embun pagi kering untuk menghindari larva cacing di rumput.",
+    "tags": ["sapi", "kambing", "cacingan", "albendazole", "kurus"]
+  },
+  {
+    "id": 12,
+    "category": "livestock",
+    "title": "Mastitis (Radang Ambing) Sapi Perah / Kambing ETAWA",
+    "symptom": "Ambing susu membengkak keras dan panas, susu pecah menggumpal berdarah/bernanah.",
+    "solution": "1. Peras susu sampai kosong dan kompres hangat ambing dengan kain bersih.\n2. Salep / kuras intra-mamari antibiotik khusus mastitis sesuai petunjuk vet.\n3. Jaga kebersihan lantai kandang agar selalu kering dan bersih.",
+    "tags": ["sapi perah", "kambing etawa", "mastitis", "ambing susu", "bengkak"]
+  }
+]
