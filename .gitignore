@@ -1,24 +1,70 @@
-# Node modules & logs
-node_modules
+# Dependencies & Package Managers
+node_modules/
+.pnpm-store/
+
+# Vite & Web Build Outputs
+dist/
+dist-ssr/
+*.tsbuildinfo
+.cache/
+
+# Environment & Sensitive Files (Security Critical)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+*.jks
+*.keystore
+google-services.json
+GoogleService-Info.plist
+
+# Logs & Temporary Files
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Vite build output
-dist
-dist-ssr
-*.local
+# Capacitor & Android Build Outputs
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/.idea/
+android/local.properties
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
 
-# Editor directories
+# IDE & Editor Directories
 .vscode/*
 !.vscode/extensions.json
-.idea
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.tmp
+*.bak
 
-# Capacitor / Android build outputs
-android/app/build
-android/app/src/main/assets/public
+# System & OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
