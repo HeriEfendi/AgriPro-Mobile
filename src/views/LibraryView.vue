@@ -2,19 +2,21 @@
   <ion-page>
     <AppHeader />
     <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4">
+      <div class="max-w-2xl mx-auto space-y-4 page-content">
         
         <!-- Header & Instant Searchbar -->
         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
           <h2 class="font-bold text-gray-900 text-lg">📚 Pustaka Taktis Offline</h2>
           <p class="text-xs text-gray-500">Pencarian serba cepat gejala & penyakit tanpa butuh koneksi internet.</p>
           
-          <ion-searchbar
-            v-model="searchQuery"
-            placeholder="Cari penyakit, tanaman, obat, atau gejala..."
-            class="p-0 border-none rounded-xl"
-            @ionInput="onSearch"
-          />
+          <div class="searchbar-wrapper">
+            <ion-searchbar
+              v-model="searchQuery"
+              placeholder="Cari penyakit, tanaman, obat, atau gejala..."
+              class="custom-searchbar"
+              @ionInput="onSearch"
+            />
+          </div>
 
           <!-- Filter Category Tags -->
           <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs">

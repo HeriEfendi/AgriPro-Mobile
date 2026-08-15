@@ -2,7 +2,7 @@
   <ion-page>
     <AppHeader />
     <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4">
+      <div class="max-w-2xl mx-auto space-y-4 page-content">
 
         <!-- Active Profile Banner -->
         <div class="p-4 rounded-2xl shadow-sm border" :class="bannerBgClass">

@@ -2,7 +2,7 @@
   <ion-page>
     <AppHeader />
     <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4">
+      <div class="max-w-2xl mx-auto space-y-4 page-content">
 
         <!-- Ionic Segment Navigation -->
         <ion-segment v-model="selectedSegment" color="tertiary" class="bg-white rounded-xl shadow-sm border p-1">

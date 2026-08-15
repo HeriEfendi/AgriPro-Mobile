@@ -127,8 +127,41 @@
 
 /* Safe area padding for fixed bottom tab bar */
 ion-content {
-  --padding-bottom: 68px;
+  --padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
 }
+
+/* Tambahkan class ini ke div wrapper dalam ion-content jika --padding-bottom tidak cukup */
+.page-content {
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ── Ionic Component Overrides ── */
+
+/* LibraryView: Rounded Searchbar */
+.searchbar-wrapper {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f3f4f6;
+  transition: border-color 0.2s;
+}
+
+.searchbar-wrapper:focus-within {
+  border-color: #6b7280;
+}
+
+.custom-searchbar {
+  --border-radius: 999px;
+  --box-shadow: none;
+  --background: transparent;
+  --placeholder-color: #9ca3af;
+  --color: #111827;
+  --icon-color: #6b7280;
+  --clear-button-color: #6b7280;
+  padding: 0;
+  margin: 0;
+}
+
 
 /* Utility Extensions */
 @layer utilities {
