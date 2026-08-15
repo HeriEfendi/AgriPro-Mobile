@@ -125,6 +125,11 @@
   }
 }
 
+/* Safe area padding for fixed bottom tab bar */
+ion-content {
+  --padding-bottom: 68px;
+}
+
 /* Utility Extensions */
 @layer utilities {
   .glass-card {

@@ -1,5 +1,5 @@
 <template>
-  <ion-footer class="border-t border-gray-200 bg-white shadow-md">
+  <ion-footer class="border-t border-gray-200 bg-white shadow-md" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;">
     <div class="flex justify-around items-center py-2 px-1">
       <button
         type="button"
