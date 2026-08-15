@@ -77,8 +77,8 @@ Task ini disusun secara terstruktur dari pembentukan scaffolding, UI/UX, logika 
 
 ## 🌐 Phase 6: PWA Optimization & Polishing
 
-- [ ] **Task 6.1 Service Worker & Cache**:
-  - Setup `vite-plugin-pwa` agar aplikasi web dapat di-install sebagai PWA dan berjalan 100% offline di browser HP.
-- [ ] **Task 6.2 Performance & UI Polish**:
-  - Uji kontras warna UI (*High Contrast Mode*) agar tetap nyaman dibaca di bawah sinar matahari langsung.
-  - Tambahkan haptic feedback (`@capacitor/haptics`) pada tombol-tombol konfirmasi utama.
+- [x] **Task 6.1 Service Worker & Cache**:
+  - Setup `vite-plugin-pwa` agar aplikasi web dapat di-install sebagai PWA dan berjalan 100% offline di browser HP dengan Service Worker `sw.js`.
+- [x] **Task 6.2 Performance & UI Polish**:
+  - Uji kontras warna UI (*High Contrast Outdoor Mode*) agar tetap nyaman dibaca di bawah sinar matahari langsung.
+  - Tambahkan haptic feedback (`@capacitor/haptics`) pada tombol-tombol konfirmasi utama via `haptics.js`.

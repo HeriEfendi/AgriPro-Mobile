@@ -5,7 +5,7 @@
       <div class="max-w-2xl mx-auto space-y-4">
         
         <!-- Ionic Segment Sub-Navigation -->
-        <ion-segment v-model="selectedSegment" color="primary" class="bg-white rounded-xl shadow-sm border p-1">
+        <ion-segment v-model="selectedSegment" color="primary" class="bg-white rounded-xl shadow-sm border p-1" @ionChange="triggerHapticImpact()">
           <ion-segment-button value="agrimix">
             <ion-label class="text-xs font-bold">AgriMix Tangki</ion-label>
           </ion-segment-button>
@@ -137,7 +137,7 @@
               </div>
             </div>
 
-            <button @click="saveSchedule" class="w-full py-2 bg-agri-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-agri-700">
+            <button @click="saveSchedule" class="w-full py-2 bg-agri-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-agri-700 active:scale-95 transition">
               Simpan Jadwal Tanam & Set Notifikasi WTH
             </button>
           </div>
@@ -174,6 +174,7 @@ import AppTabBar from '@/components/AppTabBar.vue';
 import { calculateTankDose, calculatePlantPopulation, checkChemicalCompatibility } from '@/utils/calculators/agriMixCalc';
 import { addCropSchedule, getAllCropSchedules, deleteCropSchedule } from '@/services/db';
 import { scheduleNotification } from '@/services/notificationService';
+import { triggerHapticImpact, triggerHapticSuccess } from '@/utils/haptics';
 
 const selectedSegment = ref('agrimix');
 
@@ -222,24 +223,25 @@ async function loadSchedules() {
 }
 
 async function saveSchedule() {
+  await triggerHapticSuccess();
   const newId = await addCropSchedule({
     crop_name: cropName.value,
     plant_date: plantDate.value,
     wth_days: wthDays.value
   });
 
-  // Schedule Local Notification for WTH
   await scheduleNotification({
     id: newId,
     title: `⚠️ Pengingat WTH ${cropName.value}`,
     body: `Masa Waktu Henti Hama (WTH) ${wthDays.value} hari telah selesai. Tanaman siap dipanen dengan aman!`,
-    scheduleDate: new Date(Date.now() + 10000) // Trigger in 10s for demonstration
+    scheduleDate: new Date(Date.now() + 10000)
   });
 
   await loadSchedules();
 }
 
 async function removeSchedule(id) {
+  await triggerHapticImpact();
   await deleteCropSchedule(id);
   await loadSchedules();
 }
