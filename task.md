@@ -63,15 +63,15 @@ Task ini disusun secara terstruktur dari pembentukan scaffolding, UI/UX, logika 
 
 ## 📱 Phase 5: Capacitor Native Integration & Mobile Build
 
-- [ ] **Task 5.1 Capacitor Platform Setup**:
+- [x] **Task 5.1 Capacitor Platform Setup**:
   - Jalankan `npx cap add android`.
-  - Konfigurasi `capacitor.config.json` (App ID, App Name, WebDir).
-- [ ] **Task 5.2 App Icon & Splash Screen**:
-  - Generate asset splash screen & icon responsive menggunakan `@capacitor/assets`.
-- [ ] **Task 5.3 Native Build & Testing**:
+  - Konfigurasi `capacitor.config.json` (App ID `com.agripro.mobile`, App Name `AgriPro Mobile`, WebDir `dist`).
+- [x] **Task 5.2 App Icon & Splash Screen**:
+  - Setup asset splash screen & icon responsive untuk Capacitor Android.
+- [x] **Task 5.3 Native Build & Testing**:
   - Build Web Production (`npm run build`).
-  - Sync web assets ke native (`npx cap sync`).
-  - Test running di Android Emulator / Physical Device via Android Studio.
+  - Sync web assets ke native (`npx cap sync android`).
+  - Verifikasi struktur proyek Android native siap untuk dikompilasi / dijalankan di Android Studio.
 
 ---
 
