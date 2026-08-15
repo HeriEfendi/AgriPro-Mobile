@@ -6,11 +6,11 @@ Task ini disusun secara terstruktur dari pembentukan scaffolding, UI/UX, logika 
 
 ## 📌 Phase 1: Project Scaffolding & Setup Baseline
 
-- [ ] **Task 1.1**: Inisialisasi Project Vue 3 + Vite dengan Ionic Vue (`@ionic/vue`).
-- [ ] **Task 1.2**: Install & Konfigurasi Tailwind CSS + `@capacitor/core` + `@capacitor/cli`.
-- [ ] **Task 1.3**: Setup Router (`vue-router`) dengan Ionic Page Transitions (`IonPage`, `IonRouterOutlet`).
-- [ ] **Task 1.4**: Setup State Management menggunakan Pinia.
-- [ ] **Task 1.5**: Integrasi Dexie.js (IndexedDB) & buat schema awal database (`src/services/db.js`).
+- [x] **Task 1.1**: Inisialisasi Project Vue 3 + Vite dengan Ionic Vue (`@ionic/vue`).
+- [x] **Task 1.2**: Install & Konfigurasi Tailwind CSS + `@capacitor/core` + `@capacitor/cli`.
+- [x] **Task 1.3**: Setup Router (`vue-router`) dengan Ionic Page Transitions (`IonPage`, `IonRouterOutlet`).
+- [x] **Task 1.4**: Setup State Management menggunakan Pinia.
+- [x] **Task 1.5**: Integrasi Dexie.js (IndexedDB) & buat schema awal database (`src/services/db.js`).
 
 ---
 
