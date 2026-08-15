@@ -34,17 +34,17 @@ Task ini disusun secara terstruktur dari pembentukan scaffolding, UI/UX, logika 
 
 ## 🎨 Phase 3: UI/UX Component Development
 
-- [ ] **Task 3.1 Global Layout & Navigation**:
-  - Buat `AppHeader.vue` dengan Ionic Header + Profile Switcher Dropdown.
-  - Buat `AppTabBar.vue` menggunakan `IonTabBar` (*Home*, *Calculators*, *Schedule*, *Library*).
-- [ ] **Task 3.2 View Architecture**:
-  - `DashboardView.vue`: Widget ringkasan cepat berbasis profil aktif.
-  - `AgriModuleView.vue`: Tab/Segment Ionic untuk AgriMix, Populasi, dan Tanam.
-  - `AquaModuleView.vue`: Tab/Segment Ionic untuk Log Air, FCR, dan Sampling.
-  - `LivestockModuleView.vue`: Tab/Segment Ionic untuk Feed Blender dan Breeding.
-  - `LibraryView.vue`: Interface pencarian cepat (*instant search filter*) untuk Pustaka Offline.
-- [ ] **Task 3.3 Offline Chart Integration**:
-  - Integrasi Chart.js / ApexCharts untuk visualisasi tren air & grafik ADG pertumbuhan (100% offline Canvas rendering).
+- [x] **Task 3.1 Global Layout & Navigation**:
+  - Buat `AppHeader.vue` dengan Ionic Header + Profile Switcher Dropdown & Modal Konversi Satuan (`UnitConverterModal.vue`).
+  - Buat `AppTabBar.vue` menggunakan `IonTabBar` (*Home*, *Pertanian*, *Pertambakan*, *Peternakan*, *Pustaka*).
+- [x] **Task 3.2 View Architecture**:
+  - `DashboardView.vue`: Widget ringkasan cepat & pintasan berbasis profil aktif.
+  - `AgriModuleView.vue`: Tab/Segment Ionic untuk AgriMix, Populasi, dan Kalender Tanam.
+  - `AquaModuleView.vue`: Tab/Segment Ionic untuk Log Air, FCR, dan Sampling ADG.
+  - `LivestockModuleView.vue`: Tab/Segment Ionic untuk Feed Blender dan Breeding/Vaksin.
+  - `LibraryView.vue`: Interface pencarian cepat (*instant search filter*) `IonSearchbar` untuk Pustaka Offline.
+- [x] **Task 3.3 Offline Chart Integration**:
+  - Integrasi Chart.js & vue-chartjs (`WaterChart.vue` & `GrowthChart.vue`) untuk visualisasi tren air & grafik ADG pertumbuhan (100% offline Canvas rendering).
 
 ---
 
