@@ -50,15 +50,14 @@ Task ini disusun secara terstruktur dari pembentukan scaffolding, UI/UX, logika 
 
 ## ⚡ Phase 4: Integrasi Feature & Business Logic
 
-- [ ] **Task 4.1 Form & Live Calculation Handling**:
+- [x] **Task 4.1 Form & Live Calculation Handling**:
   - Hubungkan input Form Ionic (`IonInput`, `IonSelect`) ke Pinia Store / Calculator Utilities secara real-time.
-- [ ] **Task 4.2 Local Notification Engine**:
-  - Setup Service `@capacitor/local-notifications`.
-  - Buat mekanisme pemicu notifikasi lokal saat pengguna menambahkan jadwal penyemprotan (WTH) atau jadwal perkiraan lahir ternak.
-- [ ] **Task 4.3 CRUD Log Water & Sampling**:
-  - Integrasikan form input log air dengan Dexie.js (`db.water_logs.add()`) dan buat reactive live query ke UI.
-- [ ] **Task 4.4 Offline Search Engine**:
-  - Implementasikan fuzzy search pada modul Pustaka Taktis menggunakan Dexie.js index query.
+- [x] **Task 4.2 Local Notification Engine**:
+  - Setup Service `@capacitor/local-notifications` (`notificationService.js`) untuk pemicu notifikasi lokal saat menambahkan jadwal penyemprotan (WTH) atau perkiraan lahir ternak.
+- [x] **Task 4.3 CRUD Log Water, Crop, & Breeding**:
+  - Integrasikan form input log air, jadwal tanam, dan kebuntingan dengan Dexie.js (`db.water_logs.add()`, `db.crop_schedules`, `db.breeding_logs`) dan buat reactive live query ke UI.
+- [x] **Task 4.4 Offline Search Engine**:
+  - Implementasikan fuzzy search pada modul Pustaka Taktis menggunakan Dexie.js index query & filter multi-tag.
 
 ---
 

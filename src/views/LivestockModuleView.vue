@@ -103,6 +103,27 @@
                 <span>H+21 Hari Dari Tanggal IB</span>
               </div>
             </div>
+
+            <button @click="saveBreedingLog" class="w-full py-2 bg-livestock-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-livestock-700">
+              Simpan Jadwal IB & Set Notifikasi Kelahiran
+            </button>
+          </div>
+
+          <!-- History Table from Dexie -->
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
+            <h4 class="font-bold text-gray-800 text-xs">📋 Riwayat Catatan Kebuntingan Ternak</h4>
+            <div v-if="breedingList.length > 0" class="space-y-2">
+              <div v-for="item in breedingList" :key="item.id" class="p-2.5 bg-livestock-50 rounded-lg border border-livestock-200 flex justify-between items-center text-xs">
+                <div>
+                  <div class="font-bold text-livestock-900">Tag: {{ item.animal_tag }} ({{ item.animal_type.toUpperCase() }})</div>
+                  <div class="text-gray-600">Tanggal IB: {{ item.ib_date }} | Est Lahir: {{ item.expected_birth_date }}</div>
+                </div>
+                <button @click="removeBreedingLog(item.id)" class="text-red-600 font-bold px-2 py-1 bg-white rounded border border-red-200 hover:bg-red-50">
+                  Hapus
+                </button>
+              </div>
+            </div>
+            <div v-else class="text-xs text-gray-400 text-center py-2">Belum ada catatan kebuntingan tersimpan.</div>
           </div>
         </div>
 
@@ -113,11 +134,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppTabBar from '@/components/AppTabBar.vue';
 import { calculatePearsonSquare } from '@/utils/calculators/feedBlenderCalc';
+import { addBreedingLog, getAllBreedingLogs, deleteBreedingLog } from '@/services/db';
+import { scheduleNotification } from '@/services/notificationService';
 
 const selectedSegment = ref('blender');
 
@@ -140,10 +163,11 @@ const blendResult = computed(() => {
   );
 });
 
-// Breeding State
+// Breeding State & Dexie CRUD
 const animalTag = ref('Sapi-01');
 const animalType = ref('sapi');
 const ibDate = ref(new Date().toISOString().substring(0, 10));
+const breedingList = ref([]);
 
 const expectedBirthDate = computed(() => {
   if (!ibDate.value) return '-';
@@ -151,5 +175,38 @@ const expectedBirthDate = computed(() => {
   const gestationDays = animalType.value === 'sapi' ? 283 : 150;
   date.setDate(date.getDate() + gestationDays);
   return date.toISOString().substring(0, 10);
+});
+
+async function loadBreedingLogs() {
+  breedingList.value = await getAllBreedingLogs();
+}
+
+async function saveBreedingLog() {
+  const newId = await addBreedingLog({
+    animal_tag: animalTag.value,
+    animal_type: animalType.value,
+    ib_date: ibDate.value,
+    expected_birth_date: expectedBirthDate.value,
+    vaccine_status: 'Lengkap'
+  });
+
+  // Schedule Local Notification for Birth
+  await scheduleNotification({
+    id: newId,
+    title: `🐄 Pengingat Perkiraan Lahir ${animalTag.value}`,
+    body: `Ternak ${animalTag.value} diperkirakan melahirkan pada ${expectedBirthDate.value}. Siapkan kandang kelahiran!`,
+    scheduleDate: new Date(Date.now() + 10000) // Trigger in 10s for demonstration
+  });
+
+  await loadBreedingLogs();
+}
+
+async function removeBreedingLog(id) {
+  await deleteBreedingLog(id);
+  await loadBreedingLogs();
+}
+
+onMounted(() => {
+  loadBreedingLogs();
 });
 </script>

@@ -103,54 +103,42 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { IonPage, IonContent, IonSearchbar } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppTabBar from '@/components/AppTabBar.vue';
 import knowledgeSeedData from '@/data/knowledgeSeed.json';
-import { db } from '@/services/db';
+import { searchKnowledge, db } from '@/services/db';
 
 const searchQuery = ref('');
 const activeCategory = ref('all');
-const knowledgeItems = ref(knowledgeSeedData);
+const filteredList = ref(knowledgeSeedData);
 
-onMounted(async () => {
+async function performSearch() {
   try {
-    const dbItems = await db.offline_knowledge.toArray();
-    if (dbItems.length > 0) {
-      knowledgeItems.value = dbItems;
-    }
+    const results = await searchKnowledge(searchQuery.value, activeCategory.value);
+    filteredList.value = results.length > 0 ? results : (searchQuery.value ? [] : knowledgeSeedData);
   } catch (e) {
-    console.error('Dexie fetch error, using fallback seed:', e);
+    console.error('Dexie search error, falling back:', e);
+    filteredList.value = knowledgeSeedData;
   }
-});
+}
 
 function setCategory(cat) {
   activeCategory.value = cat;
+  performSearch();
 }
 
 function onSearch() {
-  // Searchbar input listener
+  performSearch();
 }
 
-const filteredList = computed(() => {
-  return knowledgeItems.value.filter(item => {
-    // Category Filter
-    if (activeCategory.value !== 'all' && item.category !== activeCategory.value) {
-      return false;
-    }
+watch([searchQuery, activeCategory], () => {
+  performSearch();
+});
 
-    // Text Search Filter
-    if (!searchQuery.value.trim()) return true;
-
-    const query = searchQuery.value.toLowerCase();
-    const matchTitle = item.title?.toLowerCase().includes(query);
-    const matchSymptom = item.symptom?.toLowerCase().includes(query);
-    const matchSolution = item.solution?.toLowerCase().includes(query);
-    const matchTags = item.tags?.some(tag => tag.toLowerCase().includes(query));
-
-    return matchTitle || matchSymptom || matchSolution || matchTags;
-  });
+onMounted(() => {
+  performSearch();
 });
 
 function getCategoryBadgeClass(category) {

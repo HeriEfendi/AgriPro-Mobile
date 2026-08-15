@@ -21,7 +21,7 @@
         <div v-if="selectedSegment === 'water'" class="space-y-4">
           <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
             <h3 class="font-bold text-aqua-800 text-sm">📊 Grafik Tren Kualitas Air Offline</h3>
-            <WaterChart :logs="sampleWaterLogs" />
+            <WaterChart :logs="waterLogList" />
           </div>
 
           <!-- Quick Log Input Form -->
@@ -45,9 +45,26 @@
                 <input v-model.number="doVal" type="number" step="0.1" placeholder="5.0" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
             </div>
-            <button @click="addWaterLog" class="w-full py-2 bg-aqua-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-aqua-700">
-              Simpan Log Air ke IndexedDB
+            <button @click="saveWaterLog" class="w-full py-2 bg-aqua-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-aqua-700">
+              Simpan Log Air ke Dexie IndexedDB
             </button>
+          </div>
+
+          <!-- History Table from Dexie -->
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
+            <h4 class="font-bold text-gray-800 text-xs">📋 Riwayat Catatan Air Kolam</h4>
+            <div v-if="waterLogList.length > 0" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+              <div v-for="item in waterLogList" :key="item.id" class="p-2.5 bg-aqua-50 rounded-lg border border-aqua-200 flex justify-between items-center text-xs">
+                <div>
+                  <div class="font-bold text-aqua-900">pH {{ item.ph }} | Suhu {{ item.temp }}°C</div>
+                  <div class="text-gray-500 text-[10px]">Salinitas {{ item.salinity }} ppt | DO {{ item.do_level }} mg/L</div>
+                </div>
+                <button @click="removeWaterLog(item.id)" class="text-red-600 font-bold px-2 py-1 bg-white rounded border border-red-200 hover:bg-red-50">
+                  Hapus
+                </button>
+              </div>
+            </div>
+            <div v-else class="text-xs text-gray-400 text-center py-2">Belum ada catatan air tersimpan.</div>
           </div>
         </div>
 
@@ -148,47 +165,53 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppTabBar from '@/components/AppTabBar.vue';
 import WaterChart from '@/components/charts/WaterChart.vue';
 import GrowthChart from '@/components/charts/GrowthChart.vue';
 import { calculateFCR, calculateDailyFeed, calculateADG } from '@/utils/calculators/aquaFcrCalc';
-import { db } from '@/services/db';
+import { addWaterLog, getAllWaterLogs, deleteWaterLog } from '@/services/db';
 
 const selectedSegment = ref('water');
 
-// Water log state & sample chart data
+// Water log state & Dexie live data
 const phVal = ref(7.5);
 const tempVal = ref(28.5);
 const salinityVal = ref(15);
 const doVal = ref(5.0);
+const waterLogList = ref([]);
 
-const sampleWaterLogs = ref([
-  { date: 'Tgl 1', ph: 7.2, temp: 28.5, do_level: 5.2 },
-  { date: 'Tgl 2', ph: 7.5, temp: 29.0, do_level: 4.8 },
-  { date: 'Tgl 3', ph: 6.8, temp: 28.2, do_level: 5.5 },
-  { date: 'Tgl 4', ph: 7.4, temp: 29.5, do_level: 5.1 },
-  { date: 'Tgl 5', ph: 7.6, temp: 28.8, do_level: 4.9 }
-]);
+async function loadWaterLogs() {
+  const logs = await getAllWaterLogs();
+  if (logs.length === 0) {
+    // Initial sample fallback
+    waterLogList.value = [
+      { id: 1, ph: 7.2, temp: 28.5, salinity: 15, do_level: 5.2 },
+      { id: 2, ph: 7.5, temp: 29.0, salinity: 15, do_level: 4.8 },
+      { id: 3, ph: 6.8, temp: 28.2, salinity: 14, do_level: 5.5 },
+      { id: 4, ph: 7.4, temp: 29.5, salinity: 15, do_level: 5.1 }
+    ];
+  } else {
+    waterLogList.value = logs;
+  }
+}
 
-async function addWaterLog() {
-  const newLog = {
-    timestamp: new Date().toISOString(),
+async function saveWaterLog() {
+  await addWaterLog({
     ph: phVal.value,
     temp: tempVal.value,
     salinity: salinityVal.value,
     do_level: doVal.value,
-    pond_id: 'Kolam-1'
-  };
-  await db.water_logs.add(newLog);
-  sampleWaterLogs.value.push({
-    date: `Tgl ${sampleWaterLogs.value.length + 1}`,
-    ph: phVal.value,
-    temp: tempVal.value,
-    do_level: doVal.value
+    pond_id: 'Kolam Utama'
   });
+  await loadWaterLogs();
+}
+
+async function removeWaterLog(id) {
+  await deleteWaterLog(id);
+  await loadWaterLogs();
 }
 
 // FCR State
@@ -229,5 +252,9 @@ const daysCount = ref(10);
 
 const adgResult = computed(() => {
   return calculateADG(weightEnd.value || 0, weightStart.value || 0, daysCount.value || 1);
+});
+
+onMounted(() => {
+  loadWaterLogs();
 });
 </script>

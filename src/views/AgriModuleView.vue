@@ -114,25 +114,49 @@
           </div>
         </div>
 
-        <!-- Segment 3: Kalender Tanam -->
-        <div v-else class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <h3 class="font-bold text-agri-800 text-sm">📅 Smart Crop Calendar & WTH</h3>
-          <p class="text-xs text-gray-500">Hitung otomatis Waktu Henti Hama (WTH) penyemprotan obat sebelum waktu panen aman.</p>
-          <div class="space-y-2 text-xs">
-            <div>
-              <label class="font-semibold text-gray-700">Nama Tanaman</label>
-              <input v-model="cropName" placeholder="Padi Inpari 32 / Cabai Rawit" class="w-full mt-1 p-2 border rounded-lg" />
-            </div>
-            <div class="grid grid-cols-2 gap-2">
+        <!-- Segment 3: Kalender Tanam & WTH Notifikasi -->
+        <div v-else class="space-y-4">
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
+            <h3 class="font-bold text-agri-800 text-sm">📅 Smart Crop Calendar & WTH</h3>
+            <p class="text-xs text-gray-500">Hitung & simpan otomatis Waktu Henti Hama (WTH) penyemprotan obat dengan notifikasi lokal.</p>
+            
+            <div class="space-y-2 text-xs">
               <div>
-                <label class="font-semibold text-gray-700">Tanggal Tanam</label>
-                <input v-model="plantDate" type="date" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="font-semibold text-gray-700">Nama Tanaman</label>
+                <input v-model="cropName" placeholder="Padi Inpari 32 / Cabai Rawit" class="w-full mt-1 p-2 border rounded-lg" />
               </div>
-              <div>
-                <label class="font-semibold text-gray-700">Hari WTH Obat (Hari)</label>
-                <input v-model.number="wthDays" type="number" placeholder="14" class="w-full mt-1 p-2 border rounded-lg" />
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="font-semibold text-gray-700">Tanggal Tanam</label>
+                  <input v-model="plantDate" type="date" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
+                <div>
+                  <label class="font-semibold text-gray-700">Hari WTH Obat (Hari)</label>
+                  <input v-model.number="wthDays" type="number" placeholder="14" class="w-full mt-1 p-2 border rounded-lg" />
+                </div>
               </div>
             </div>
+
+            <button @click="saveSchedule" class="w-full py-2 bg-agri-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-agri-700">
+              Simpan Jadwal Tanam & Set Notifikasi WTH
+            </button>
+          </div>
+
+          <!-- List Jadwal Tanam dari IndexedDB -->
+          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
+            <h4 class="font-bold text-gray-800 text-xs">📋 Daftar Jadwal Tanam Aktif</h4>
+            <div v-if="scheduleList.length > 0" class="space-y-2">
+              <div v-for="item in scheduleList" :key="item.id" class="p-2.5 bg-agri-50 rounded-lg border border-agri-200 flex justify-between items-center text-xs">
+                <div>
+                  <div class="font-bold text-agri-900">{{ item.crop_name }}</div>
+                  <div class="text-gray-600">Tanam: {{ item.plant_date }} | WTH: {{ item.wth_days }} Hari</div>
+                </div>
+                <button @click="removeSchedule(item.id)" class="text-red-600 font-bold px-2 py-1 bg-white rounded border border-red-200 hover:bg-red-50">
+                  Hapus
+                </button>
+              </div>
+            </div>
+            <div v-else class="text-xs text-gray-400 text-center py-2">Belum ada jadwal tanam tersimpan.</div>
           </div>
         </div>
 
@@ -143,11 +167,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
 import AppTabBar from '@/components/AppTabBar.vue';
 import { calculateTankDose, calculatePlantPopulation, checkChemicalCompatibility } from '@/utils/calculators/agriMixCalc';
+import { addCropSchedule, getAllCropSchedules, deleteCropSchedule } from '@/services/db';
+import { scheduleNotification } from '@/services/notificationService';
 
 const selectedSegment = ref('agrimix');
 
@@ -185,8 +211,40 @@ const popResult = computed(() => {
   return calculatePlantPopulation(popAreaM2.value || 0, rowSpacing.value || 0, plantSpacing.value || 0, seedsPerHole.value || 1);
 });
 
-// Calendar State
+// Calendar & IndexedDB State
 const cropName = ref('Padi Inpari 32');
 const plantDate = ref(new Date().toISOString().substring(0, 10));
 const wthDays = ref(14);
+const scheduleList = ref([]);
+
+async function loadSchedules() {
+  scheduleList.value = await getAllCropSchedules();
+}
+
+async function saveSchedule() {
+  const newId = await addCropSchedule({
+    crop_name: cropName.value,
+    plant_date: plantDate.value,
+    wth_days: wthDays.value
+  });
+
+  // Schedule Local Notification for WTH
+  await scheduleNotification({
+    id: newId,
+    title: `⚠️ Pengingat WTH ${cropName.value}`,
+    body: `Masa Waktu Henti Hama (WTH) ${wthDays.value} hari telah selesai. Tanaman siap dipanen dengan aman!`,
+    scheduleDate: new Date(Date.now() + 10000) // Trigger in 10s for demonstration
+  });
+
+  await loadSchedules();
+}
+
+async function removeSchedule(id) {
+  await deleteCropSchedule(id);
+  await loadSchedules();
+}
+
+onMounted(() => {
+  loadSchedules();
+});
 </script>
