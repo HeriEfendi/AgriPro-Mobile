@@ -1,55 +1,62 @@
 <template>
-  <ion-tab-bar slot="bottom" color="light" class="border-t border-gray-200 py-1">
-    <ion-tab-button
-      tab="dashboard"
-      @click="navigateTo('/dashboard')"
-      :class="{ 'tab-selected text-agri-600': isActive('/dashboard') }"
-    >
-      <ion-icon :icon="homeOutline" />
-      <ion-label class="text-[11px] font-medium">Beranda</ion-label>
-    </ion-tab-button>
+  <ion-footer class="border-t border-gray-200 bg-white shadow-md">
+    <div class="flex justify-around items-center py-2 px-1">
+      <button
+        type="button"
+        @click="navigateTo('/dashboard')"
+        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
+        :class="isActive('/dashboard') ? 'text-agri-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+      >
+        <ion-icon :icon="homeOutline" class="text-xl" />
+        <span class="text-[11px] mt-0.5">Beranda</span>
+      </button>
 
-    <ion-tab-button
-      tab="agri"
-      @click="navigateTo('/agri')"
-      :class="{ 'tab-selected text-agri-600': isActive('/agri') }"
-    >
-      <ion-icon :icon="leafOutline" />
-      <ion-label class="text-[11px] font-medium">Pertanian</ion-label>
-    </ion-tab-button>
+      <button
+        type="button"
+        @click="navigateTo('/agri')"
+        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
+        :class="isActive('/agri') ? 'text-agri-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+      >
+        <ion-icon :icon="leafOutline" class="text-xl" />
+        <span class="text-[11px] mt-0.5">Pertanian</span>
+      </button>
 
-    <ion-tab-button
-      tab="aqua"
-      @click="navigateTo('/aqua')"
-      :class="{ 'tab-selected text-aqua-600': isActive('/aqua') }"
-    >
-      <ion-icon :icon="waterOutline" />
-      <ion-label class="text-[11px] font-medium">Pertambakan</ion-label>
-    </ion-tab-button>
+      <button
+        type="button"
+        @click="navigateTo('/aqua')"
+        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
+        :class="isActive('/aqua') ? 'text-aqua-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+      >
+        <ion-icon :icon="waterOutline" class="text-xl" />
+        <span class="text-[11px] mt-0.5">Pertambakan</span>
+      </button>
 
-    <ion-tab-button
-      tab="livestock"
-      @click="navigateTo('/livestock')"
-      :class="{ 'tab-selected text-livestock-600': isActive('/livestock') }"
-    >
-      <ion-icon :icon="pawOutline" />
-      <ion-label class="text-[11px] font-medium">Peternakan</ion-label>
-    </ion-tab-button>
+      <button
+        type="button"
+        @click="navigateTo('/livestock')"
+        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
+        :class="isActive('/livestock') ? 'text-livestock-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+      >
+        <ion-icon :icon="pawOutline" class="text-xl" />
+        <span class="text-[11px] mt-0.5">Peternakan</span>
+      </button>
 
-    <ion-tab-button
-      tab="library"
-      @click="navigateTo('/library')"
-      :class="{ 'tab-selected text-purple-600': isActive('/library') }"
-    >
-      <ion-icon :icon="bookOutline" />
-      <ion-label class="text-[11px] font-medium">Pustaka</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
+      <button
+        type="button"
+        @click="navigateTo('/library')"
+        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
+        :class="isActive('/library') ? 'text-purple-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+      >
+        <ion-icon :icon="bookOutline" class="text-xl" />
+        <span class="text-[11px] mt-0.5">Pustaka</span>
+      </button>
+    </div>
+  </ion-footer>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/vue';
+import { IonFooter, IonIcon } from '@ionic/vue';
 import { homeOutline, leafOutline, waterOutline, pawOutline, bookOutline } from 'ionicons/icons';
 import { triggerHapticImpact } from '@/utils/haptics';
 
