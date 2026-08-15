@@ -7,8 +7,9 @@
 
       <ion-buttons slot="end">
         <!-- Button Konverter Satuan -->
-        <ion-button @click="showConverterModal = true" class="text-xs">
-          <span class="mr-1">🔄</span> Konversi
+        <ion-button @click="showConverterModal = true" class="text-xs" fill="clear" color="light">
+          <ion-icon :icon="swapHorizontalOutline" slot="start" class="text-base" />
+          Konversi
         </ion-button>
 
         <!-- Dropdown Profile Switcher -->
@@ -35,7 +36,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton } from '@ionic/vue';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon } from '@ionic/vue';
+import { swapHorizontalOutline } from 'ionicons/icons';
 import { useProfileStore } from '@/stores/useProfileStore';
 import UnitConverterModal from './UnitConverterModal.vue';
 
