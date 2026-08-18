@@ -22,12 +22,17 @@ import '@ionic/vue/css/display.css';
 import '@/theme/variables.css';
 import '@/style.css';
 
+import { initSeedData } from '@/services/seedService';
+
 const app = createApp(App);
 const pinia = createPinia();
 
 app.use(IonicVue);
 app.use(pinia);
 app.use(router);
+
+// Initialize IndexedDB seed data (Offline knowledge & default profile)
+initSeedData();
 
 router.isReady().then(() => {
   app.mount('#app');

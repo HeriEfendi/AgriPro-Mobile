@@ -186,17 +186,20 @@ const doVal = ref(5.0);
 const waterLogList = ref([]);
 
 async function loadWaterLogs() {
-  const logs = await getAllWaterLogs();
+  let logs = await getAllWaterLogs();
   if (logs.length === 0) {
-    waterLogList.value = [
-      { id: 1, ph: 7.2, temp: 28.5, salinity: 15, do_level: 5.2 },
-      { id: 2, ph: 7.5, temp: 29.0, salinity: 15, do_level: 4.8 },
-      { id: 3, ph: 6.8, temp: 28.2, salinity: 14, do_level: 5.5 },
-      { id: 4, ph: 7.4, temp: 29.5, salinity: 15, do_level: 5.1 }
+    const initialSamples = [
+      { ph: 7.2, temp: 28.5, salinity: 15, do_level: 5.2, pond_id: 'Kolam Utama' },
+      { ph: 7.5, temp: 29.0, salinity: 15, do_level: 4.8, pond_id: 'Kolam Utama' },
+      { ph: 6.8, temp: 28.2, salinity: 14, do_level: 5.5, pond_id: 'Kolam Utama' },
+      { ph: 7.4, temp: 29.5, salinity: 15, do_level: 5.1, pond_id: 'Kolam Utama' }
     ];
-  } else {
-    waterLogList.value = logs;
+    for (const sample of initialSamples) {
+      await addWaterLog(sample);
+    }
+    logs = await getAllWaterLogs();
   }
+  waterLogList.value = logs;
 }
 
 async function saveWaterLog() {
