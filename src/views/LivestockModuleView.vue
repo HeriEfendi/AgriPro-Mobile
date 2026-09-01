@@ -1,71 +1,81 @@
 <template>
   <ion-page>
     <AppHeader />
-    <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4 page-content">
+    <ion-content class="bg-slate-50/50">
+      <div class="max-w-2xl mx-auto px-4 py-4 space-y-5 page-content">
 
-        <!-- Ionic Segment Navigation -->
-        <ion-segment v-model="selectedSegment" color="tertiary" class="bg-white rounded-xl shadow-sm border p-1">
+        <!-- Ionic Segment Navigation (Pill Segment) -->
+        <ion-segment v-model="selectedSegment" @ionChange="triggerHapticImpact()" class="shadow-soft">
           <ion-segment-button value="blender">
             <ion-label class="text-xs font-bold">Feed Blender</ion-label>
           </ion-segment-button>
           <ion-segment-button value="breeding">
-            <ion-label class="text-xs font-bold">Breeding & Vaksin</ion-label>
+            <ion-label class="text-xs font-bold">Breeding & IB</ion-label>
           </ion-segment-button>
         </ion-segment>
 
         <!-- Segment 1: Feed Blender (Pearson Square Formulasi Ransum) -->
         <div v-if="selectedSegment === 'blender'" class="space-y-4">
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-livestock-800 text-sm">🌾 Formulasi Ransum Pakan (Pearson Square)</h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                🌾
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Formulasi Ransum Pakan (Pearson Square)</h3>
+                <p class="text-[11px] text-slate-400">Pencampuran 2 bahan pakan dengan target protein kasar</p>
+              </div>
+            </div>
             
-            <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <label class="font-semibold text-gray-700">Bahan 1 (Rendah CP)</label>
-                <input v-model="name1" placeholder="Jagung Halus" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="label-field">Bahan 1 (Rendah CP)</label>
+                <input v-model="name1" placeholder="Jagung Halus" class="input-field" />
               </div>
               <div>
-                <label class="font-semibold text-gray-700">Protein Kasar CP 1 (%)</label>
-                <input v-model.number="cp1" type="number" step="0.1" placeholder="9" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="label-field">Protein Kasar CP 1 (%)</label>
+                <input v-model.number="cp1" type="number" step="0.1" placeholder="9" class="input-field" />
               </div>
               <div>
-                <label class="font-semibold text-gray-700">Bahan 2 (Tinggi CP)</label>
-                <input v-model="name2" placeholder="Konsentrat Super" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="label-field">Bahan 2 (Tinggi CP)</label>
+                <input v-model="name2" placeholder="Konsentrat Super" class="input-field" />
               </div>
               <div>
-                <label class="font-semibold text-gray-700">Protein Kasar CP 2 (%)</label>
-                <input v-model.number="cp2" type="number" step="0.1" placeholder="35" class="w-full mt-1 p-2 border rounded-lg" />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 text-xs border-t pt-2">
-              <div>
-                <label class="font-semibold text-gray-700">Target CP Campuran (%)</label>
-                <input v-model.number="targetCP" type="number" step="0.1" placeholder="16" class="w-full mt-1 p-2 border rounded-lg font-bold text-livestock-700" />
-              </div>
-              <div>
-                <label class="font-semibold text-gray-700">Total Adonan (kg)</label>
-                <input v-model.number="totalBatchKg" type="number" placeholder="100" class="w-full mt-1 p-2 border rounded-lg font-bold text-livestock-700" />
+                <label class="label-field">Protein Kasar CP 2 (%)</label>
+                <input v-model.number="cp2" type="number" step="0.1" placeholder="35" class="input-field" />
               </div>
             </div>
 
-            <div v-if="blendResult.isValid" class="p-3 bg-livestock-50 rounded-xl border border-livestock-200 text-xs space-y-2">
-              <div class="font-bold text-sm text-livestock-900 border-b border-livestock-200 pb-1">
-                Resep Racikan {{ totalBatchKg }} kg (Target CP {{ targetCP }}%):
+            <div class="grid grid-cols-2 gap-3 text-xs border-t border-slate-100 pt-3">
+              <div>
+                <label class="label-field">Target CP Campuran (%)</label>
+                <input v-model.number="targetCP" type="number" step="0.1" placeholder="16" class="input-field font-bold text-amber-700" />
+              </div>
+              <div>
+                <label class="label-field">Total Adonan (kg)</label>
+                <input v-model.number="totalBatchKg" type="number" placeholder="100" class="input-field font-bold text-amber-700" />
+              </div>
+            </div>
+
+            <!-- Result Box -->
+            <div v-if="blendResult.isValid" class="p-4 bg-amber-50/70 rounded-2xl border border-amber-100/90 text-xs space-y-2.5">
+              <div class="font-bold text-xs text-amber-950 border-b border-amber-100 pb-2 flex justify-between items-center">
+                <span>Resep Racikan {{ totalBatchKg }} kg:</span>
+                <span class="text-amber-700 font-extrabold">Target CP {{ targetCP }}%</span>
               </div>
               
-              <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-livestock-100">
-                <span class="font-bold text-gray-800">{{ blendResult.ingredient1.name }} (CP {{ blendResult.ingredient1.cp }}%)</span>
-                <span class="font-bold text-livestock-700 text-sm">{{ blendResult.ingredient1.kg }} kg ({{ blendResult.ingredient1.percent }}%)</span>
+              <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-amber-100/80 shadow-soft">
+                <span class="font-bold text-slate-800">{{ blendResult.ingredient1.name }} (CP {{ blendResult.ingredient1.cp }}%)</span>
+                <span class="font-extrabold text-amber-700 text-sm">{{ blendResult.ingredient1.kg }} kg ({{ blendResult.ingredient1.percent }}%)</span>
               </div>
 
-              <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-livestock-100">
-                <span class="font-bold text-gray-800">{{ blendResult.ingredient2.name }} (CP {{ blendResult.ingredient2.cp }}%)</span>
-                <span class="font-bold text-livestock-700 text-sm">{{ blendResult.ingredient2.kg }} kg ({{ blendResult.ingredient2.percent }}%)</span>
+              <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-amber-100/80 shadow-soft">
+                <span class="font-bold text-slate-800">{{ blendResult.ingredient2.name }} (CP {{ blendResult.ingredient2.cp }}%)</span>
+                <span class="font-extrabold text-amber-700 text-sm">{{ blendResult.ingredient2.kg }} kg ({{ blendResult.ingredient2.percent }}%)</span>
               </div>
             </div>
 
-            <div v-else class="p-3 bg-red-50 text-red-800 rounded-xl border border-red-200 text-xs font-semibold">
+            <div v-else class="p-4 bg-rose-50 text-rose-800 rounded-2xl border border-rose-100 text-xs font-semibold">
               {{ blendResult.message }}
             </div>
           </div>
@@ -73,63 +83,79 @@
 
         <!-- Segment 2: Breeding & Vaccine Calendar -->
         <div v-else class="space-y-4">
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-livestock-800 text-sm">🐄 Kalender Birahi & Inseminasi Buatan (IB)</h3>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <label class="font-semibold text-gray-700">Nomor Tag Ternak</label>
-                <input v-model="animalTag" placeholder="Sapi-01 / Kambing-A" class="w-full mt-1 p-2 border rounded-lg" />
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                🐄
               </div>
               <div>
-                <label class="font-semibold text-gray-700">Jenis Ternak</label>
-                <select v-model="animalType" class="w-full mt-1 p-2 border rounded-lg bg-white">
-                  <option value="sapi">Sapi (Kebuntingan ~283 Hari)</option>
-                  <option value="kambing">Kambing (Kebuntingan ~150 Hari)</option>
+                <h3 class="font-bold text-slate-900 text-sm">Kalender Birahi & Inseminasi Buatan (IB)</h3>
+                <p class="text-[11px] text-slate-400">Prediksi siklus birahi H+21 dan perkiraan tanggal lahir</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <label class="label-field">Nomor Tag Ternak</label>
+                <input v-model="animalTag" placeholder="Sapi-01 / Kambing-A" class="input-field" />
+              </div>
+              <div>
+                <label class="label-field">Jenis Ternak</label>
+                <select v-model="animalType" class="select-field">
+                  <option value="sapi">Sapi (~283 Hari Kebuntingan)</option>
+                  <option value="kambing">Kambing (~150 Hari Kebuntingan)</option>
                 </select>
               </div>
               <div class="col-span-2">
-                <label class="font-semibold text-gray-700">Tanggal Inseminasi (IB)</label>
-                <input v-model="ibDate" type="date" class="w-full mt-1 p-2 border rounded-lg" />
+                <label class="label-field">Tanggal Inseminasi Buatan (IB)</label>
+                <input v-model="ibDate" type="date" class="input-field" />
               </div>
             </div>
 
-            <div class="p-3 bg-livestock-50 rounded-xl border border-livestock-200 text-xs space-y-1.5">
-              <div class="flex justify-between font-bold text-livestock-900">
+            <div class="p-4 bg-amber-50/70 rounded-2xl border border-amber-100/90 text-xs space-y-2">
+              <div class="flex justify-between items-center font-bold text-amber-950 border-b border-amber-100 pb-2">
                 <span>Estimasi Tanggal Melahirkan:</span>
-                <span class="text-sm text-livestock-700">{{ expectedBirthDate }}</span>
+                <span class="text-base text-amber-700 font-extrabold">{{ expectedBirthDate }}</span>
               </div>
-              <div class="flex justify-between text-gray-600">
+              <div class="flex justify-between text-slate-600">
                 <span>Siklus Birahi Berikutnya (Jika IB Gagal):</span>
-                <span>H+21 Hari Dari Tanggal IB</span>
+                <span class="font-semibold text-slate-800">H+21 Hari Dari Tanggal IB</span>
               </div>
             </div>
 
-            <button @click="saveBreedingLog" class="w-full py-2 bg-livestock-600 text-white rounded-lg font-bold text-xs shadow-sm hover:bg-livestock-700">
-              Simpan Jadwal IB & Set Notifikasi Kelahiran
+            <button @click="saveBreedingLog" class="btn-tertiary">
+              <span>💾</span> Simpan Jadwal IB & Pasang Notifikasi
             </button>
           </div>
 
           <!-- History Table from Dexie -->
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h4 class="font-bold text-gray-800 text-xs">📋 Riwayat Catatan Kebuntingan Ternak</h4>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-slate-900 text-xs">Riwayat Catatan Kebuntingan</h4>
+              <span class="text-[10px] text-slate-400">{{ breedingList.length }} Catatan</span>
+            </div>
+
             <div v-if="breedingList.length > 0" class="space-y-2">
-              <div v-for="item in breedingList" :key="item.id" class="p-2.5 bg-livestock-50 rounded-lg border border-livestock-200 flex justify-between items-center text-xs">
+              <div
+                v-for="item in breedingList"
+                :key="item.id"
+                class="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-100 flex justify-between items-center text-xs"
+              >
                 <div>
-                  <div class="font-bold text-livestock-900">Tag: {{ item.animal_tag }} ({{ item.animal_type.toUpperCase() }})</div>
-                  <div class="text-gray-600">Tanggal IB: {{ item.ib_date }} | Est Lahir: {{ item.expected_birth_date }}</div>
+                  <div class="font-bold text-amber-950 text-sm">Tag: {{ item.animal_tag }} ({{ item.animal_type.toUpperCase() }})</div>
+                  <div class="text-slate-500 text-[11px] mt-0.5">Tanggal IB: {{ item.ib_date }} • Est Lahir: {{ item.expected_birth_date }}</div>
                 </div>
-                <button @click="removeBreedingLog(item.id)" class="text-red-600 font-bold px-2 py-1 bg-white rounded border border-red-200 hover:bg-red-50">
+                <button @click="removeBreedingLog(item.id)" class="btn-danger">
                   Hapus
                 </button>
               </div>
             </div>
-            <div v-else class="text-xs text-gray-400 text-center py-2">Belum ada catatan kebuntingan tersimpan.</div>
+            <div v-else class="text-xs text-slate-400 text-center py-4">Belum ada catatan kebuntingan tersimpan.</div>
           </div>
         </div>
 
       </div>
     </ion-content>
-
   </ion-page>
 </template>
 
@@ -141,6 +167,7 @@ import AppHeader from '@/components/AppHeader.vue';
 import { calculatePearsonSquare } from '@/utils/calculators/feedBlenderCalc';
 import { addBreedingLog, getAllBreedingLogs, deleteBreedingLog } from '@/services/db';
 import { scheduleNotification } from '@/services/notificationService';
+import { triggerHapticImpact } from '@/utils/haptics';
 
 const selectedSegment = ref('blender');
 
@@ -195,7 +222,7 @@ async function saveBreedingLog() {
     id: newId,
     title: `🐄 Pengingat Perkiraan Lahir ${animalTag.value}`,
     body: `Ternak ${animalTag.value} diperkirakan melahirkan pada ${expectedBirthDate.value}. Siapkan kandang kelahiran!`,
-    scheduleDate: new Date(Date.now() + 10000) // Trigger in 10s for demonstration
+    scheduleDate: new Date(Date.now() + 10000)
   });
 
   await loadBreedingLogs();

@@ -1,176 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Base Styles & Strict Light Theme for Form Controls */
+/* Custom Base Styles & Strict Light Theme */
 @layer base {
   :root {
     color-scheme: light !important;
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    background-color: #f9fafb !important;
-    color: #111827 !important;
+    background-color: #F8FAFC !important;
+    color: #1E293B !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #111827 !important;
+    color: #0F172A !important;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
-  /* Force all native input, select, textarea controls to bright white background */
+  /* Force all native inputs to clean modern styling */
   input, select, textarea {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-    border-color: #d1d5db !important;
+    background-color: #FFFFFF !important;
+    color: #1E293B !important;
+    border-color: #E2E8F0 !important;
+    font-family: inherit;
   }
 
   input::placeholder, textarea::placeholder {
-    color: #9ca3af !important;
+    color: #94A3B8 !important;
   }
 
-  /* Override browser autofill dark background */
+  /* Override browser autofill background */
   input:-webkit-autofill,
   input:-webkit-autofill:hover, 
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
-    -webkit-text-fill-color: #111827 !important;
+    -webkit-text-fill-color: #1E293B !important;
   }
 }
 
 /* Standardized Design System Components */
 @layer components {
   /* Cards */
+  .card-modern {
+    @apply bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-100/80 shadow-card transition-all duration-200;
+  }
+
   .card-base {
-    @apply bg-white p-4 rounded-xl border border-gray-200 shadow-sm transition hover:shadow-md;
+    @apply bg-white p-4 rounded-2xl border border-slate-100 shadow-soft transition hover:shadow-card;
   }
 
   .card-agri {
-    @apply bg-agri-50 p-4 rounded-xl border border-agri-200 shadow-sm text-agri-900;
+    @apply bg-agri-50/70 p-4 rounded-2xl border border-agri-100 shadow-soft text-agri-900;
   }
 
   .card-aqua {
-    @apply bg-aqua-50 p-4 rounded-xl border border-aqua-200 shadow-sm text-aqua-900;
+    @apply bg-aqua-50/70 p-4 rounded-2xl border border-aqua-100 shadow-soft text-aqua-900;
   }
 
   .card-livestock {
-    @apply bg-livestock-50 p-4 rounded-xl border border-livestock-200 shadow-sm text-livestock-900;
+    @apply bg-livestock-50/70 p-4 rounded-2xl border border-livestock-100 shadow-soft text-livestock-900;
   }
 
   /* Form Controls */
   .input-field {
-    @apply w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 focus:ring-2 focus:ring-agri-500 focus:border-agri-500 outline-none transition shadow-inner;
-    background-color: #ffffff !important;
-    color: #111827 !important;
+    @apply w-full mt-1.5 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition duration-150;
   }
 
   .select-field {
-    @apply w-full mt-1 p-2.5 border border-gray-300 rounded-lg text-sm bg-white text-gray-900 focus:ring-2 focus:ring-agri-500 outline-none transition cursor-pointer;
-    background-color: #ffffff !important;
-    color: #111827 !important;
+    @apply w-full mt-1.5 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 outline-none transition duration-150 cursor-pointer;
   }
 
   .label-field {
-    @apply text-xs font-bold text-gray-800 block mb-1;
+    @apply text-xs font-semibold text-slate-600 block mb-0.5 tracking-tight;
   }
 
   /* Buttons */
+  .btn-brand {
+    @apply w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold text-sm rounded-2xl shadow-float transition duration-150 flex items-center justify-center gap-2 cursor-pointer;
+  }
+
   .btn-primary {
-    @apply w-full py-2.5 px-4 bg-agri-600 hover:bg-agri-700 active:scale-95 text-white font-bold text-xs rounded-lg shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer;
+    @apply w-full py-2.5 px-4 bg-brand-600 hover:bg-brand-700 active:scale-[0.98] text-white font-bold text-xs rounded-xl shadow-soft transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer;
   }
 
   .btn-secondary {
-    @apply w-full py-2.5 px-4 bg-aqua-600 hover:bg-aqua-700 active:scale-95 text-white font-bold text-xs rounded-lg shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer;
+    @apply w-full py-2.5 px-4 bg-aqua-600 hover:bg-aqua-700 active:scale-[0.98] text-white font-bold text-xs rounded-xl shadow-soft transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer;
   }
 
   .btn-tertiary {
-    @apply w-full py-2.5 px-4 bg-livestock-600 hover:bg-livestock-700 active:scale-95 text-white font-bold text-xs rounded-lg shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer;
+    @apply w-full py-2.5 px-4 bg-livestock-600 hover:bg-livestock-700 active:scale-[0.98] text-white font-bold text-xs rounded-xl shadow-soft transition duration-150 flex items-center justify-center gap-1.5 cursor-pointer;
   }
 
   .btn-danger {
-    @apply text-red-600 font-bold px-2.5 py-1 bg-white rounded-md border border-red-200 hover:bg-red-50 active:scale-95 transition text-xs cursor-pointer;
+    @apply text-rose-600 font-semibold px-3 py-1 bg-rose-50 rounded-lg border border-rose-100 hover:bg-rose-100 active:scale-95 transition text-xs cursor-pointer;
   }
 
   /* Badges */
   .badge-base {
-    @apply text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-wide inline-block;
+    @apply text-[11px] font-bold px-2.5 py-1 rounded-full tracking-wide inline-flex items-center gap-1;
+  }
+
+  .badge-brand {
+    @apply bg-brand-50 text-brand-700 border border-brand-200/60;
   }
 
   .badge-agri {
-    @apply bg-agri-100 text-agri-800 border border-agri-200;
+    @apply bg-emerald-50 text-emerald-700 border border-emerald-200/60;
   }
 
   .badge-aqua {
-    @apply bg-aqua-100 text-aqua-800 border border-aqua-200;
+    @apply bg-sky-50 text-sky-700 border border-sky-200/60;
   }
 
   .badge-livestock {
-    @apply bg-livestock-100 text-livestock-800 border border-livestock-200;
-  }
-
-  .badge-success {
-    @apply bg-green-100 text-green-800 border border-green-200;
-  }
-
-  .badge-warning {
-    @apply bg-amber-100 text-amber-800 border border-amber-200;
-  }
-
-  .badge-danger {
-    @apply bg-red-100 text-red-800 border border-red-200;
+    @apply bg-amber-50 text-amber-700 border border-amber-200/60;
   }
 }
 
-/* Safe area padding for fixed bottom tab bar */
+/* Safe area padding for bottom tab bar */
 ion-content {
-  --padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  --background: #F8FAFC;
+  --padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
 }
 
-/* Tambahkan class ini ke div wrapper dalam ion-content jika --padding-bottom tidak cukup */
 .page-content {
-  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
 }
 
-/* ── Ionic Component Overrides ── */
-
-/* LibraryView: Rounded Searchbar */
-.searchbar-wrapper {
-  border: 1.5px solid #e5e7eb;
-  border-radius: 999px;
-  overflow: hidden;
-  background: #f3f4f6;
-  transition: border-color 0.2s;
+/* Ionic Segment Pill Styling */
+ion-segment {
+  --background: #F1F5F9;
+  border-radius: 9999px;
+  padding: 4px;
 }
 
-.searchbar-wrapper:focus-within {
-  border-color: #6b7280;
+ion-segment-button {
+  --indicator-color: #FFFFFF;
+  --indicator-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --color: #64748B;
+  --color-checked: #2D7A6E;
+  --border-radius: 9999px;
+  min-height: 36px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Searchbar Modern Pill */
+.searchbar-pill {
+  @apply flex items-center bg-white border border-slate-200/80 rounded-full px-4 py-2.5 shadow-soft transition focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20;
 }
 
 .custom-searchbar {
-  --border-radius: 999px;
+  --border-radius: 9999px;
   --box-shadow: none;
   --background: transparent;
-  --placeholder-color: #9ca3af;
-  --color: #111827;
-  --icon-color: #6b7280;
-  --clear-button-color: #6b7280;
+  --placeholder-color: #94A3B8;
+  --color: #1E293B;
+  --icon-color: #64748B;
+  --clear-button-color: #64748B;
   padding: 0;
   margin: 0;
 }
 
+/* Glassmorphism Cards */
+.glass-banner {
+  background: linear-gradient(135deg, #2D7A6E 0%, #1F5A51 100%);
+  color: #FFFFFF;
+}
 
-/* Utility Extensions */
+.glass-pill {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-stat-card {
+  background: #FFFFFF;
+  border: 1px solid #F1F5F9;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+/* Timeline Vertical Line */
+.timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 58px;
+  width: 2px;
+  background: #E2E8F0;
+  z-index: 0;
+}
+
+/* Utilities */
 @layer utilities {
-  .glass-card {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }

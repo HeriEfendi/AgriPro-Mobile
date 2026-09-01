@@ -1,11 +1,11 @@
 <template>
   <ion-page>
     <AppHeader />
-    <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4 page-content">
+    <ion-content class="bg-slate-50/50">
+      <div class="max-w-2xl mx-auto px-4 py-4 space-y-5 page-content">
 
-        <!-- Ionic Segment Navigation -->
-        <ion-segment v-model="selectedSegment" color="secondary" class="bg-white rounded-xl shadow-sm border p-1">
+        <!-- Ionic Segment Navigation (Pill Segment) -->
+        <ion-segment v-model="selectedSegment" @ionChange="triggerHapticImpact()" class="shadow-soft">
           <ion-segment-button value="water">
             <ion-label class="text-xs font-bold">Log Air & Chart</ion-label>
           </ion-segment-button>
@@ -19,111 +19,153 @@
 
         <!-- Segment 1: Log Kualitas Air & Chart.js Offline -->
         <div v-if="selectedSegment === 'water'" class="space-y-4">
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-aqua-800 text-sm">📊 Grafik Tren Kualitas Air Offline</h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
+            <div class="flex items-center gap-2.5 mb-1">
+              <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+                📊
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Grafik Kualitas Air Kolam (Offline)</h3>
+                <p class="text-[11px] text-slate-400">Monitoring tren pH, suhu, dan oksigen terlarut</p>
+              </div>
+            </div>
             <WaterChart :logs="waterLogList" />
           </div>
 
           <!-- Quick Log Input Form -->
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-gray-800 text-sm flex items-center gap-1.5">
-              <span>➕</span> Catat Parameter Air Hari Ini
-            </h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+                💧
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Catat Parameter Air Hari Ini</h3>
+                <p class="text-[11px] text-slate-400">Simpan ke database lokal Dexie</p>
+              </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <label class="font-bold text-gray-800 block mb-1">pH Air (6.5 - 8.5)</label>
+                <label class="label-field">pH Air (6.5 - 8.5)</label>
                 <input v-model.number="phVal" type="number" step="0.1" placeholder="7.5" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">Suhu (°C)</label>
+                <label class="label-field">Suhu (°C)</label>
                 <input v-model.number="tempVal" type="number" step="0.1" placeholder="28.5" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">Salinitas (ppt)</label>
+                <label class="label-field">Salinitas (ppt)</label>
                 <input v-model.number="salinityVal" type="number" placeholder="15" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">DO Terlarut (mg/L)</label>
+                <label class="label-field">DO Terlarut (mg/L)</label>
                 <input v-model.number="doVal" type="number" step="0.1" placeholder="5.0" class="input-field" />
               </div>
             </div>
+
             <button @click="saveWaterLog" class="btn-secondary">
-              Simpan Log Air ke Dexie IndexedDB
+              <span>💾</span> Simpan Log Air ke Dexie DB
             </button>
           </div>
 
           <!-- History Table from Dexie -->
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h4 class="font-bold text-gray-800 text-xs">📋 Riwayat Catatan Air Kolam</h4>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-slate-900 text-xs">Riwayat Catatan Parameter Air</h4>
+              <span class="text-[10px] text-slate-400">{{ waterLogList.length }} Catatan</span>
+            </div>
+
             <div v-if="waterLogList.length > 0" class="space-y-2 max-h-48 overflow-y-auto pr-1">
-              <div v-for="item in waterLogList" :key="item.id" class="p-2.5 bg-aqua-50 rounded-lg border border-aqua-200 flex justify-between items-center text-xs">
+              <div
+                v-for="item in waterLogList"
+                :key="item.id"
+                class="p-3.5 bg-sky-50/60 rounded-2xl border border-sky-100 flex justify-between items-center text-xs"
+              >
                 <div>
-                  <div class="font-bold text-aqua-900">pH {{ item.ph }} | Suhu {{ item.temp }}°C</div>
-                  <div class="text-gray-600 text-[10px]">Salinitas {{ item.salinity }} ppt | DO {{ item.do_level }} mg/L</div>
+                  <div class="font-bold text-sky-950 text-xs">pH {{ item.ph }} • Suhu {{ item.temp }}°C</div>
+                  <div class="text-slate-500 text-[11px] mt-0.5">Salinitas {{ item.salinity }} ppt • DO {{ item.do_level }} mg/L</div>
                 </div>
                 <button @click="removeWaterLog(item.id)" class="btn-danger">
                   Hapus
                 </button>
               </div>
             </div>
-            <div v-else class="text-xs text-gray-400 text-center py-2">Belum ada catatan air tersimpan.</div>
+            <div v-else class="text-xs text-slate-400 text-center py-4">Belum ada catatan air tersimpan.</div>
           </div>
         </div>
 
         <!-- Segment 2: FCR & Biomassa -->
         <div v-else-if="selectedSegment === 'fcr'" class="space-y-4">
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-aqua-800 text-sm">⚖️ Kalkulator Feed Conversion Ratio (FCR)</h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+                ⚖️
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Kalkulator Feed Conversion Ratio (FCR)</h3>
+                <p class="text-[11px] text-slate-400">Efisiensi pakan udang & ikan budidaya</p>
+              </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <label class="font-bold text-gray-800 block mb-1">Total Pakan Diberikan (kg)</label>
+                <label class="label-field">Total Pakan (kg)</label>
                 <input v-model.number="totalFeedKg" type="number" placeholder="120" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">Biomassa Akhir (kg)</label>
+                <label class="label-field">Biomassa Akhir (kg)</label>
                 <input v-model.number="finalBiomassKg" type="number" placeholder="100" class="input-field" />
               </div>
             </div>
 
-            <div class="p-3 rounded-xl border text-xs space-y-1.5" :class="fcrBgClass">
-              <div class="flex justify-between font-bold text-sm">
+            <div class="p-4 rounded-2xl border text-xs space-y-1.5" :class="fcrBgClass">
+              <div class="flex justify-between font-extrabold text-base">
                 <span>Nilai FCR:</span>
                 <span>{{ fcrResult.fcr }}</span>
               </div>
-              <p>{{ fcrResult.description }}</p>
+              <p class="text-[11px] leading-relaxed opacity-90">{{ fcrResult.description }}</p>
             </div>
           </div>
 
           <!-- Kalkulator Pakan Harian -->
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-gray-800 text-sm">🍽️ Estimasi Pakan Harian (Feeding Rate)</h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+                🍽️
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Estimasi Pakan Harian (Feeding Rate)</h3>
+                <p class="text-[11px] text-slate-400">Hitung porsi makan per hari & per sesi</p>
+              </div>
+            </div>
+
             <div class="grid grid-cols-3 gap-2 text-xs">
               <div>
-                <label class="font-bold text-gray-800 block mb-1">Populasi (Ekor)</label>
+                <label class="label-field">Populasi (Ekor)</label>
                 <input v-model.number="population" type="number" placeholder="10000" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">ABW (Gram)</label>
+                <label class="label-field">ABW (Gram)</label>
                 <input v-model.number="abwGram" type="number" step="0.1" placeholder="10" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">FR (%)</label>
+                <label class="label-field">FR (%)</label>
                 <input v-model.number="feedingRatePercent" type="number" step="0.1" placeholder="3" class="input-field" />
               </div>
             </div>
 
-            <div class="p-3 bg-aqua-50 rounded-xl border border-aqua-200 text-xs space-y-1.5">
-              <div class="flex justify-between font-semibold text-aqua-900">
+            <div class="p-4 bg-sky-50/70 rounded-2xl border border-sky-100/90 text-xs space-y-2">
+              <div class="flex justify-between font-semibold text-slate-700">
                 <span>Biomassa Total Kolam:</span>
-                <span class="font-bold text-aqua-700">{{ dailyFeedResult.totalBiomassKg }} kg</span>
+                <span class="font-bold text-slate-900">{{ dailyFeedResult.totalBiomassKg }} kg</span>
               </div>
-              <div class="flex justify-between font-bold text-aqua-900 border-t pt-1">
+              <div class="flex justify-between font-bold text-sky-950 border-t border-sky-100 pt-2">
                 <span>Kebutuhan Pakan Harian:</span>
-                <span class="text-sm text-aqua-700">{{ dailyFeedResult.dailyFeedKg }} kg / Hari</span>
+                <span class="text-base text-sky-700 font-extrabold">{{ dailyFeedResult.dailyFeedKg }} kg / Hari</span>
               </div>
-              <div class="flex justify-between text-gray-600">
+              <div class="flex justify-between text-slate-500">
                 <span>Porsi 3x Makan:</span>
-                <span>{{ dailyFeedResult.feedPerMeal3xKg }} kg / sesi</span>
+                <span class="font-semibold text-slate-700">{{ dailyFeedResult.feedPerMeal3xKg }} kg / sesi</span>
               </div>
             </div>
           </div>
@@ -131,38 +173,54 @@
 
         <!-- Segment 3: Sampling Growth Tracker -->
         <div v-else class="space-y-4">
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-aqua-800 text-sm">📈 Kurva Pertumbuhan ABW (Chart Offline)</h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
+            <div class="flex items-center gap-2.5 mb-1">
+              <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+                📈
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Kurva Pertumbuhan ABW (Chart Offline)</h3>
+                <p class="text-[11px] text-slate-400">Tren penambahan bobot rata-rata mingguan</p>
+              </div>
+            </div>
             <GrowthChart :samples="sampleGrowthData" />
           </div>
 
-          <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-gray-800 text-sm">🧮 Hitung Average Daily Gain (ADG)</h3>
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl">
+                🧮
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Hitung Average Daily Gain (ADG)</h3>
+                <p class="text-[11px] text-slate-400">Pertambahan bobot harian udang/ikan</p>
+              </div>
+            </div>
+
             <div class="grid grid-cols-3 gap-2 text-xs">
               <div>
-                <label class="font-bold text-gray-800 block mb-1">ABW Awal (g)</label>
+                <label class="label-field">ABW Awal (g)</label>
                 <input v-model.number="weightStart" type="number" step="0.1" placeholder="5" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">ABW Akhir (g)</label>
+                <label class="label-field">ABW Akhir (g)</label>
                 <input v-model.number="weightEnd" type="number" step="0.1" placeholder="15" class="input-field" />
               </div>
               <div>
-                <label class="font-bold text-gray-800 block mb-1">Jumlah Hari</label>
+                <label class="label-field">Jumlah Hari</label>
                 <input v-model.number="daysCount" type="number" placeholder="10" class="input-field" />
               </div>
             </div>
 
-            <div class="p-3 bg-aqua-50 rounded-xl border border-aqua-200 text-xs flex justify-between font-bold text-aqua-900">
-              <span>Laju ADG (Gram/Hari):</span>
-              <span class="text-sm text-aqua-700">{{ adgResult.adgGramPerDay }} g / hari</span>
+            <div class="p-4 bg-sky-50/70 rounded-2xl border border-sky-100 text-xs flex justify-between items-center font-bold text-sky-950">
+              <span>Laju ADG Harian:</span>
+              <span class="text-base text-sky-700 font-extrabold">{{ adgResult.adgGramPerDay }} gram / hari</span>
             </div>
           </div>
         </div>
 
       </div>
     </ion-content>
-
   </ion-page>
 </template>
 
@@ -175,6 +233,7 @@ import WaterChart from '@/components/charts/WaterChart.vue';
 import GrowthChart from '@/components/charts/GrowthChart.vue';
 import { calculateFCR, calculateDailyFeed, calculateADG } from '@/utils/calculators/aquaFcrCalc';
 import { addWaterLog, getAllWaterLogs, deleteWaterLog } from '@/services/db';
+import { triggerHapticImpact } from '@/utils/haptics';
 
 const selectedSegment = ref('water');
 
@@ -227,9 +286,9 @@ const fcrResult = computed(() => {
 });
 
 const fcrBgClass = computed(() => {
-  if (fcrResult.value.status === 'EXCELLENT') return 'bg-green-50 border-green-200 text-green-800';
-  if (fcrResult.value.status === 'WARNING') return 'bg-amber-50 border-amber-200 text-amber-800';
-  return 'bg-blue-50 border-blue-200 text-blue-800';
+  if (fcrResult.value.status === 'EXCELLENT') return 'bg-emerald-50 border-emerald-200 text-emerald-900';
+  if (fcrResult.value.status === 'WARNING') return 'bg-amber-50 border-amber-200 text-amber-900';
+  return 'bg-sky-50 border-sky-200 text-sky-900';
 });
 
 // Daily Feed State

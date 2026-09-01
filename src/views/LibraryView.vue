@@ -1,134 +1,306 @@
 <template>
   <ion-page>
     <AppHeader />
-    <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4 page-content">
+    <ion-content class="bg-slate-50/50">
+      <div class="max-w-2xl mx-auto px-4 py-4 space-y-5 page-content">
         
-        <!-- Header & Instant Searchbar -->
-        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-3">
-          <h2 class="font-bold text-gray-900 text-lg">📚 Pustaka Taktis Offline</h2>
-          <p class="text-xs text-gray-500">Pencarian serba cepat gejala & penyakit tanpa butuh koneksi internet.</p>
-          
-          <div class="searchbar-wrapper">
-            <ion-searchbar
-              v-model="searchQuery"
-              placeholder="Cari penyakit, tanaman, obat, atau gejala..."
-              class="custom-searchbar"
-              @ionInput="onSearch"
-            />
-          </div>
-
-          <!-- Filter Category Tags -->
-          <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs">
-            <button
-              @click="setCategory('all')"
-              class="px-3 py-1 rounded-full font-semibold whitespace-nowrap transition"
-              :class="activeCategory === 'all' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-600'"
-            >
-              Semua Modul
-            </button>
-            <button
-              @click="setCategory('agri')"
-              class="px-3 py-1 rounded-full font-semibold whitespace-nowrap transition"
-              :class="activeCategory === 'agri' ? 'bg-agri-600 text-white' : 'bg-agri-50 text-agri-800'"
-            >
-              🌾 Pertanian
-            </button>
-            <button
-              @click="setCategory('aqua')"
-              class="px-3 py-1 rounded-full font-semibold whitespace-nowrap transition"
-              :class="activeCategory === 'aqua' ? 'bg-aqua-600 text-white' : 'bg-aqua-50 text-aqua-800'"
-            >
-              🦐 Pertambakan
-            </button>
-            <button
-              @click="setCategory('livestock')"
-              class="px-3 py-1 rounded-full font-semibold whitespace-nowrap transition"
-              :class="activeCategory === 'livestock' ? 'bg-livestock-600 text-white' : 'bg-livestock-50 text-livestock-800'"
-            >
-              🐄 Peternakan
-            </button>
-          </div>
-        </div>
-
-        <!-- Result List Cards -->
-        <div v-if="filteredList.length > 0" class="space-y-3">
-          <div
-            v-for="item in filteredList"
-            :key="item.id"
-            class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-2 hover:border-agri-300 transition"
+        <!-- Searchbar Pill -->
+        <div class="searchbar-pill">
+          <svg class="w-5 h-5 text-slate-400 mr-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Cari penyakit, komoditas, gejala, atau obat..."
+            class="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 outline-none border-none p-0 focus:ring-0"
+            @input="onSearch"
+          />
+          <button
+            v-if="searchQuery"
+            @click="searchQuery = ''; onSearch()"
+            class="text-xs text-slate-400 hover:text-slate-600 px-1"
           >
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-gray-900 text-sm">{{ item.title }}</h3>
-              <span
-                class="text-[10px] font-bold uppercase px-2 py-0.5 rounded"
-                :class="getCategoryBadgeClass(item.category)"
+            ✕
+          </button>
+        </div>
+
+        <!-- Categories Section (4x2 Grid with pastel rounded circles matching Screen 2) -->
+        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
+          <div class="flex justify-between items-center">
+            <h2 class="text-sm font-bold text-slate-900">Kategori Komoditas</h2>
+            <button
+              @click="setFilterTag('')"
+              class="text-xs font-semibold text-brand-600 hover:text-brand-700"
+            >
+              Reset Filter
+            </button>
+          </div>
+
+          <div class="grid grid-cols-4 gap-3 text-center">
+            <!-- 1. Padi -->
+            <button
+              @click="setFilterTag('padi')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'padi' ? 'bg-emerald-600 text-white shadow-soft ring-2 ring-emerald-400' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'"
               >
-                {{ item.category }}
-              </span>
-            </div>
+                🌾
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Padi</span>
+            </button>
 
-            <div class="text-xs text-gray-700 bg-gray-50 p-2.5 rounded-lg border border-gray-100">
-              <span class="font-bold text-red-600">Gejala: </span>
-              {{ item.symptom }}
-            </div>
-
-            <div class="text-xs text-gray-800 bg-emerald-50 p-2.5 rounded-lg border border-emerald-100 whitespace-pre-line">
-              <span class="font-bold text-emerald-800">Solusi Taktis: </span>
-              {{ item.solution }}
-            </div>
-
-            <!-- Tags -->
-            <div class="flex flex-wrap gap-1 pt-1">
-              <span
-                v-for="tag in item.tags"
-                :key="tag"
-                class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full"
+            <!-- 2. Jagung -->
+            <button
+              @click="setFilterTag('jagung')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'jagung' ? 'bg-amber-500 text-white shadow-soft ring-2 ring-amber-400' : 'bg-amber-50 text-amber-600 group-hover:bg-amber-100'"
               >
-                #{{ tag }}
-              </span>
-            </div>
+                🌽
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Jagung</span>
+            </button>
+
+            <!-- 3. Cabai -->
+            <button
+              @click="setFilterTag('cabai')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'cabai' ? 'bg-rose-500 text-white shadow-soft ring-2 ring-rose-400' : 'bg-rose-50 text-rose-600 group-hover:bg-rose-100'"
+              >
+                🌶️
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Cabai</span>
+            </button>
+
+            <!-- 4. Udang -->
+            <button
+              @click="setFilterTag('udang')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'udang' ? 'bg-sky-600 text-white shadow-soft ring-2 ring-sky-400' : 'bg-sky-50 text-sky-600 group-hover:bg-sky-100'"
+              >
+                🦐
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Udang</span>
+            </button>
+
+            <!-- 5. Ikan -->
+            <button
+              @click="setFilterTag('ikan')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'ikan' ? 'bg-blue-600 text-white shadow-soft ring-2 ring-blue-400' : 'bg-blue-50 text-blue-600 group-hover:bg-blue-100'"
+              >
+                🐟
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Ikan</span>
+            </button>
+
+            <!-- 6. Sapi -->
+            <button
+              @click="setFilterTag('sapi')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'sapi' ? 'bg-amber-600 text-white shadow-soft ring-2 ring-amber-500' : 'bg-amber-100/70 text-amber-700 group-hover:bg-amber-200/70'"
+              >
+                🐄
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Sapi</span>
+            </button>
+
+            <!-- 7. Kambing -->
+            <button
+              @click="setFilterTag('kambing')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'kambing' ? 'bg-emerald-700 text-white shadow-soft ring-2 ring-emerald-500' : 'bg-emerald-100/70 text-emerald-800 group-hover:bg-emerald-200/70'"
+              >
+                🐐
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Kambing</span>
+            </button>
+
+            <!-- 8. Obat & Kimia -->
+            <button
+              @click="setFilterTag('obat')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'obat' ? 'bg-purple-600 text-white shadow-soft ring-2 ring-purple-400' : 'bg-purple-50 text-purple-600 group-hover:bg-purple-100'"
+              >
+                💊
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Obat Tani</span>
+            </button>
           </div>
         </div>
 
-        <!-- Empty Search Result State -->
-        <div v-else class="p-8 text-center bg-white rounded-xl border border-gray-200 text-gray-500">
-          <div class="text-3xl mb-2">🔍</div>
-          <p class="text-sm font-semibold">Tidak ada panduan yang cocok dengan kata kunci "{{ searchQuery }}"</p>
-          <p class="text-xs text-gray-400 mt-1">Coba gunakan kata kunci umum seperti "padi", "udang", "ph", "cacingan".</p>
+        <!-- All Doctor / All Guides List (Matching Screen 2 in Reference) -->
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <h2 class="text-sm font-bold text-slate-900">
+              Daftar Diagnosa & Panduan Taktis
+            </h2>
+            <span class="text-xs text-slate-400 font-medium">{{ filteredList.length }} Panduan</span>
+          </div>
+
+          <!-- List of Disease / Diagnostic Cards -->
+          <div v-if="filteredList.length > 0" class="space-y-3">
+            <div
+              v-for="item in filteredList"
+              :key="item.id"
+              class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card hover:shadow-elevated transition-all duration-200 space-y-3"
+            >
+              <!-- Card Header: Avatar + Title + Rating + Bookmark Heart -->
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
+                    :class="getCategoryIconBg(item.category)"
+                  >
+                    <span v-if="item.category === 'agri'">🌾</span>
+                    <span v-else-if="item.category === 'aqua'">🦐</span>
+                    <span v-else>🐄</span>
+                  </div>
+
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900 leading-snug">{{ item.title }}</h3>
+                    <div class="flex items-center gap-2 mt-1">
+                      <span class="flex items-center gap-1 text-[11px] font-bold text-amber-500">
+                        ★ 4.9 <span class="text-slate-400 font-normal">(Rekomendasi Agronom)</span>
+                      </span>
+                      <span
+                        class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                        :class="getCategoryBadgeClass(item.category)"
+                      >
+                        {{ getCategoryLabel(item.category) }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Heart Bookmark Button -->
+                <button
+                  @click="toggleFavorite(item.id)"
+                  type="button"
+                  class="w-8 h-8 rounded-full flex items-center justify-center transition active:scale-90"
+                  :class="favoriteIds.has(item.id) ? 'bg-rose-50 text-rose-500' : 'bg-slate-50 text-slate-300 hover:text-slate-400'"
+                >
+                  <svg class="w-4 h-4" :fill="favoriteIds.has(item.id) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Symptoms (Gejala) Box in soft Rose/Red -->
+              <div class="p-3 bg-rose-50/60 rounded-2xl border border-rose-100/80 text-xs text-rose-900 space-y-0.5">
+                <span class="font-bold text-rose-700 block text-[11px]">⚠️ Gejala Lapangan:</span>
+                <p class="text-slate-700 leading-relaxed">{{ item.symptom }}</p>
+              </div>
+
+              <!-- Solution (Solusi) Box in soft Emerald/Green -->
+              <div class="p-3 bg-emerald-50/60 rounded-2xl border border-emerald-100/80 text-xs text-emerald-900 space-y-0.5 whitespace-pre-line">
+                <span class="font-bold text-emerald-800 block text-[11px]">✅ Penanganan & Dosis Taktis:</span>
+                <p class="text-slate-700 leading-relaxed">{{ item.solution }}</p>
+              </div>
+
+              <!-- Tags Chips -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span
+                  v-for="tag in item.tags"
+                  :key="tag"
+                  class="text-[10px] bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full font-medium"
+                >
+                  #{{ tag }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else class="p-10 text-center bg-white rounded-3xl border border-slate-100 text-slate-400 space-y-2 shadow-soft">
+            <div class="text-4xl">🔍</div>
+            <p class="text-sm font-bold text-slate-700">Tidak ada panduan yang cocok</p>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">
+              Coba kata kunci lain atau pilih salah satu ikon kategori komoditas di atas.
+            </p>
+          </div>
         </div>
 
       </div>
     </ion-content>
-
   </ion-page>
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { IonPage, IonContent, IonSearchbar } from '@ionic/vue';
+import { useRoute } from 'vue-router';
+import { IonPage, IonContent } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
 
 import knowledgeSeedData from '@/data/knowledgeSeed.json';
-import { searchKnowledge, db } from '@/services/db';
+import { searchKnowledge } from '@/services/db';
 
+const route = useRoute();
 const searchQuery = ref('');
+const activeFilterTag = ref('');
 const activeCategory = ref('all');
 const filteredList = ref(knowledgeSeedData);
+const favoriteIds = ref(new Set([1, 6]));
 
-async function performSearch() {
-  try {
-    const results = await searchKnowledge(searchQuery.value, activeCategory.value);
-    filteredList.value = results.length > 0 ? results : (searchQuery.value ? [] : knowledgeSeedData);
-  } catch (e) {
-    console.error('Dexie search error, falling back:', e);
-    filteredList.value = knowledgeSeedData;
+function toggleFavorite(id) {
+  if (favoriteIds.value.has(id)) {
+    favoriteIds.value.delete(id);
+  } else {
+    favoriteIds.value.add(id);
   }
 }
 
-function setCategory(cat) {
-  activeCategory.value = cat;
+function setFilterTag(tag) {
+  if (activeFilterTag.value === tag) {
+    activeFilterTag.value = '';
+    searchQuery.value = '';
+  } else {
+    activeFilterTag.value = tag;
+    searchQuery.value = tag;
+  }
   performSearch();
+}
+
+async function performSearch() {
+  const query = (searchQuery.value || activeFilterTag.value || '').trim();
+  try {
+    const results = await searchKnowledge(query, activeCategory.value);
+    filteredList.value = results.length > 0 ? results : (query ? [] : knowledgeSeedData);
+  } catch (e) {
+    console.error('Search error, fallbacking:', e);
+    filteredList.value = knowledgeSeedData;
+  }
 }
 
 function onSearch() {
@@ -140,12 +312,27 @@ watch([searchQuery, activeCategory], () => {
 });
 
 onMounted(() => {
+  if (route.query.q) {
+    searchQuery.value = route.query.q;
+  }
   performSearch();
 });
 
+function getCategoryIconBg(category) {
+  if (category === 'agri') return 'bg-emerald-50 text-emerald-600';
+  if (category === 'aqua') return 'bg-sky-50 text-sky-600';
+  return 'bg-amber-50 text-amber-600';
+}
+
 function getCategoryBadgeClass(category) {
-  if (category === 'agri') return 'bg-agri-100 text-agri-800';
-  if (category === 'aqua') return 'bg-aqua-100 text-aqua-800';
-  return 'bg-livestock-100 text-livestock-800';
+  if (category === 'agri') return 'bg-emerald-50 text-emerald-700 border border-emerald-200/60';
+  if (category === 'aqua') return 'bg-sky-50 text-sky-700 border border-sky-200/60';
+  return 'bg-amber-50 text-amber-700 border border-amber-200/60';
+}
+
+function getCategoryLabel(category) {
+  if (category === 'agri') return 'Pertanian';
+  if (category === 'aqua') return 'Tambak';
+  return 'Ternak';
 }
 </script>

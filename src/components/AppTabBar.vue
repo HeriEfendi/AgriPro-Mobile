@@ -1,70 +1,123 @@
 <template>
-  <ion-footer class="border-t border-gray-200 bg-white shadow-md" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;">
-    <div class="flex justify-around items-center py-2 px-1">
+  <div class="fixed bottom-0 left-0 right-0 z-50 pointer-events-none pb-[env(safe-area-inset-bottom,0px)] px-3 mb-2">
+    <div class="max-w-md mx-auto pointer-events-auto bg-white/95 backdrop-blur-xl border border-slate-100/90 rounded-3xl shadow-elevated px-2 py-2 flex items-center justify-between">
+      
+      <!-- Tab 1: Beranda -->
       <button
         type="button"
         @click="navigateTo('/dashboard')"
-        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
-        :class="isActive('/dashboard') ? 'text-agri-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+        class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 active:scale-90 cursor-pointer outline-none group"
       >
-        <ion-icon :icon="homeOutline" class="text-xl" />
-        <span class="text-[11px] mt-0.5">Beranda</span>
+        <div
+          class="w-10 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+          :class="isActive('/dashboard') ? 'bg-brand-50 text-brand-600' : 'text-slate-400 group-hover:text-slate-600'"
+        >
+          <ion-icon :icon="homeOutline" class="text-xl" />
+        </div>
+        <span
+          class="text-[10px] font-semibold mt-0.5 tracking-tight transition-colors duration-200"
+          :class="isActive('/dashboard') ? 'text-brand-700 font-bold' : 'text-slate-400'"
+        >
+          Beranda
+        </span>
       </button>
 
+      <!-- Tab 2: Pertanian -->
       <button
         type="button"
         @click="navigateTo('/agri')"
-        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
-        :class="isActive('/agri') ? 'text-agri-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+        class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 active:scale-90 cursor-pointer outline-none group"
       >
-        <ion-icon :icon="leafOutline" class="text-xl" />
-        <span class="text-[11px] mt-0.5">Pertanian</span>
+        <div
+          class="w-10 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+          :class="isActive('/agri') ? 'bg-emerald-50 text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'"
+        >
+          <ion-icon :icon="leafOutline" class="text-xl" />
+        </div>
+        <span
+          class="text-[10px] font-semibold mt-0.5 tracking-tight transition-colors duration-200"
+          :class="isActive('/agri') ? 'text-emerald-700 font-bold' : 'text-slate-400'"
+        >
+          Tani
+        </span>
       </button>
 
+      <!-- Center Action Button (+) -->
+      <div class="flex items-center justify-center px-1">
+        <button
+          type="button"
+          @click="openQuickAction"
+          class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center shadow-float active:scale-90 transition-all duration-200 hover:brightness-110 cursor-pointer outline-none"
+          title="Aksi Cepat & Konverter"
+        >
+          <ion-icon :icon="addOutline" class="text-2xl font-bold" />
+        </button>
+      </div>
+
+      <!-- Tab 3: Tambak / Ternak -->
       <button
         type="button"
         @click="navigateTo('/aqua')"
-        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
-        :class="isActive('/aqua') ? 'text-aqua-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+        class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 active:scale-90 cursor-pointer outline-none group"
       >
-        <ion-icon :icon="waterOutline" class="text-xl" />
-        <span class="text-[11px] mt-0.5">Pertambakan</span>
+        <div
+          class="w-10 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+          :class="isActive('/aqua') ? 'bg-sky-50 text-sky-600' : 'text-slate-400 group-hover:text-slate-600'"
+        >
+          <ion-icon :icon="waterOutline" class="text-xl" />
+        </div>
+        <span
+          class="text-[10px] font-semibold mt-0.5 tracking-tight transition-colors duration-200"
+          :class="isActive('/aqua') ? 'text-sky-700 font-bold' : 'text-slate-400'"
+        >
+          Tambak
+        </span>
       </button>
 
-      <button
-        type="button"
-        @click="navigateTo('/livestock')"
-        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
-        :class="isActive('/livestock') ? 'text-livestock-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
-      >
-        <ion-icon :icon="pawOutline" class="text-xl" />
-        <span class="text-[11px] mt-0.5">Peternakan</span>
-      </button>
-
+      <!-- Tab 4: Peternakan / Pustaka -->
       <button
         type="button"
         @click="navigateTo('/library')"
-        class="flex flex-col items-center flex-1 text-center transition active:scale-95 cursor-pointer outline-none"
-        :class="isActive('/library') ? 'text-purple-600 font-bold' : 'text-gray-500 hover:text-gray-700'"
+        class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 active:scale-90 cursor-pointer outline-none group"
       >
-        <ion-icon :icon="bookOutline" class="text-xl" />
-        <span class="text-[11px] mt-0.5">Pustaka</span>
+        <div
+          class="w-10 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+          :class="isActive('/library') ? 'bg-brand-50 text-brand-600' : 'text-slate-400 group-hover:text-slate-600'"
+        >
+          <ion-icon :icon="bookOutline" class="text-xl" />
+        </div>
+        <span
+          class="text-[10px] font-semibold mt-0.5 tracking-tight transition-colors duration-200"
+          :class="isActive('/library') ? 'text-brand-700 font-bold' : 'text-slate-400'"
+        >
+          Pustaka
+        </span>
       </button>
+
     </div>
-  </ion-footer>
+
+    <!-- Quick Action Modal -->
+    <UnitConverterModal
+      :is-open="showQuickModal"
+      @close="showQuickModal = false"
+    />
+  </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { IonFooter, IonIcon } from '@ionic/vue';
-import { homeOutline, leafOutline, waterOutline, pawOutline, bookOutline } from 'ionicons/icons';
+import { IonIcon } from '@ionic/vue';
+import { homeOutline, leafOutline, waterOutline, bookOutline, addOutline } from 'ionicons/icons';
 import { triggerHapticImpact } from '@/utils/haptics';
+import UnitConverterModal from './UnitConverterModal.vue';
 
 const route = useRoute();
 const router = useRouter();
+const showQuickModal = ref(false);
 
 function isActive(path) {
-  return route.path === path || route.path.startsWith(path);
+  return route.path === path;
 }
 
 function navigateTo(path) {
@@ -72,5 +125,10 @@ function navigateTo(path) {
   if (route.path !== path) {
     router.push(path);
   }
+}
+
+function openQuickAction() {
+  triggerHapticImpact();
+  showQuickModal.value = true;
 }
 </script>

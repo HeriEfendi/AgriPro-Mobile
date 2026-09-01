@@ -1,106 +1,253 @@
 <template>
   <ion-page>
     <AppHeader />
-    <ion-content class="ion-padding bg-gray-50">
-      <div class="max-w-2xl mx-auto space-y-4 page-content">
+    <ion-content class="bg-slate-50/50">
+      <div class="max-w-2xl mx-auto px-4 py-4 space-y-5 page-content">
+        
+        <!-- 1. Modern Pill Search Bar -->
+        <div class="searchbar-pill">
+          <svg class="w-5 h-5 text-slate-400 mr-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input
+            v-model="quickSearch"
+            @keyup.enter="goToSearch"
+            type="text"
+            placeholder="Cari takaran obat, penyakit, pakan, atau dosis..."
+            class="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 outline-none border-none p-0 focus:ring-0"
+          />
+          <button
+            v-if="quickSearch"
+            @click="goToSearch"
+            class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-full ml-1"
+          >
+            Cari
+          </button>
+        </div>
 
-        <!-- Active Profile Banner -->
-        <div class="p-4 rounded-2xl shadow-sm border" :class="bannerBgClass">
+        <!-- 2. Modul & Spesialisasi Lapangan (Specialist Doctor Style) -->
+        <div>
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="text-sm font-bold text-slate-900 tracking-tight">Modul Spesialisasi</h2>
+            <router-link to="/library" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-0.5">
+              Lihat semua <span class="text-[10px]">❯</span>
+            </router-link>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5 sm:gap-3">
+            <!-- Modul Agri -->
+            <router-link
+              to="/agri"
+              class="bg-white p-3.5 rounded-2xl border border-slate-100/90 shadow-soft hover:shadow-card transition-all duration-200 flex flex-col items-center text-center group active:scale-95"
+            >
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-2 group-hover:scale-105 transition-transform">
+                🌾
+              </div>
+              <span class="text-xs font-bold text-slate-800">AgriMix</span>
+              <span class="text-[10px] text-slate-400 mt-0.5">Tangki & Bibit</span>
+            </router-link>
+
+            <!-- Modul Aqua -->
+            <router-link
+              to="/aqua"
+              class="bg-white p-3.5 rounded-2xl border border-slate-100/90 shadow-soft hover:shadow-card transition-all duration-200 flex flex-col items-center text-center group active:scale-95"
+            >
+              <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-2xl mb-2 group-hover:scale-105 transition-transform">
+                🦐
+              </div>
+              <span class="text-xs font-bold text-slate-800">AquaLog</span>
+              <span class="text-[10px] text-slate-400 mt-0.5">Air & FCR</span>
+            </router-link>
+
+            <!-- Modul Livestock -->
+            <router-link
+              to="/livestock"
+              class="bg-white p-3.5 rounded-2xl border border-slate-100/90 shadow-soft hover:shadow-card transition-all duration-200 flex flex-col items-center text-center group active:scale-95"
+            >
+              <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-2 group-hover:scale-105 transition-transform">
+                🐄
+              </div>
+              <span class="text-xs font-bold text-slate-800">Ransum</span>
+              <span class="text-[10px] text-slate-400 mt-0.5">Feed Blender</span>
+            </router-link>
+          </div>
+        </div>
+
+        <!-- 3. Hero Status Banner (My Appointment Style in Reference) -->
+        <div class="glass-banner rounded-3xl p-5 shadow-elevated relative overflow-hidden text-white">
+          <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+          
+          <div class="flex justify-between items-start mb-3.5">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl border border-white/20 shadow-inner">
+                <span v-if="profileStore.activeRole === 'tani'">🌾</span>
+                <span v-else-if="profileStore.activeRole === 'tambak'">🦐</span>
+                <span v-else>🐄</span>
+              </div>
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 text-white px-2 py-0.5 rounded-full border border-white/20">
+                  Mode {{ profileStore.activeRole.toUpperCase() }} AKTIF
+                </span>
+                <h3 class="text-base font-bold mt-1 text-white tracking-tight leading-tight">
+                  {{ profileStore.namaLahan || 'Lahan Pertanian Utama' }}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frosted Glass Pill Information Strip -->
+          <div class="glass-pill rounded-2xl p-3.5 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-base">📅</span>
+              <div>
+                <div class="text-[10px] text-emerald-100 font-medium">Status Prioritas Lapangan:</div>
+                <div class="font-bold text-white text-xs mt-0.5">
+                  <span v-if="profileStore.activeRole === 'tani'">Waktu Henti Hama (WTH) H-14 Aman</span>
+                  <span v-else-if="profileStore.activeRole === 'tambak'">Target pH 7.5 - 8.2 Stabil Kolam</span>
+                  <span v-else>Formulasi Ransum CP 16% Tercapai</span>
+                </div>
+              </div>
+            </div>
+            <router-link
+              :to="profileStore.activeRole === 'tani' ? '/agri' : profileStore.activeRole === 'tambak' ? '/aqua' : '/livestock'"
+              class="bg-white text-brand-700 font-bold px-3 py-1.5 rounded-xl shadow-soft text-[11px] hover:bg-emerald-50 transition active:scale-95 whitespace-nowrap"
+            >
+              Buka
+            </router-link>
+          </div>
+        </div>
+
+        <!-- 4. Quick Field Stats Strip (Screen 3 Pill Stats Style) -->
+        <div class="grid grid-cols-3 gap-2.5">
+          <div class="glass-stat-card p-3 rounded-2xl text-center">
+            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center text-sm mb-1">
+              ⚡
+            </div>
+            <span class="text-xs font-bold text-slate-800 block">100% Offline</span>
+            <span class="text-[10px] text-slate-400">Tanpa Kuota</span>
+          </div>
+
+          <div class="glass-stat-card p-3 rounded-2xl text-center">
+            <div class="w-8 h-8 rounded-full bg-sky-50 text-sky-600 mx-auto flex items-center justify-center text-sm mb-1">
+              📦
+            </div>
+            <span class="text-xs font-bold text-slate-800 block">Dexie DB</span>
+            <span class="text-[10px] text-slate-400">Simpan Lokal</span>
+          </div>
+
+          <div class="glass-stat-card p-3 rounded-2xl text-center">
+            <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 mx-auto flex items-center justify-center text-sm mb-1">
+              🎯
+            </div>
+            <span class="text-xs font-bold text-slate-800 block">Akurasi Dosis</span>
+            <span class="text-[10px] text-slate-400">Standar Agronomi</span>
+          </div>
+        </div>
+
+        <!-- 5. Kalender & Agenda Lapangan (Screen 4 Schedule & Timeline Style) -->
+        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card space-y-4">
           <div class="flex justify-between items-center">
             <div>
-              <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/70 text-gray-800">
-                Mode {{ profileStore.activeRole }}
-              </span>
-              <h2 class="text-xl font-bold mt-1 text-gray-900">{{ profileStore.namaLahan }}</h2>
-              <p class="text-xs text-gray-600">Aplikasi Super-App 100% Offline-First (No Internet Needed)</p>
+              <h2 class="text-sm font-bold text-slate-900">Agenda & Jadwal Lapangan</h2>
+              <p class="text-[11px] text-slate-400">{{ currentMonthYear }}</p>
             </div>
-            <div class="text-3xl">
-              <span v-if="profileStore.activeRole === 'tani'">🌾</span>
-              <span v-else-if="profileStore.activeRole === 'tambak'">🦐</span>
-              <span v-else>🐄</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Action Shortcut Cards -->
-        <div class="grid grid-cols-2 gap-3">
-          <router-link to="/agri" class="p-3 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="text-agri-600 text-xl font-bold">🌾 AgriMix</div>
-            <p class="text-xs text-gray-500 mt-1">Kalkulator Tangki Semprot & Matriks Obat</p>
-          </router-link>
-
-          <router-link to="/aqua" class="p-3 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="text-aqua-600 text-xl font-bold">🦐 Log Air & FCR</div>
-            <p class="text-xs text-gray-500 mt-1">Pantau pH/Suhu & Kalkulasi FCR Tambak</p>
-          </router-link>
-
-          <router-link to="/livestock" class="p-3 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="text-livestock-600 text-xl font-bold">🐄 Feed Blender</div>
-            <p class="text-xs text-gray-500 mt-1">Pearson Square Formulasi Ransum Pakan</p>
-          </router-link>
-
-          <router-link to="/library" class="p-3 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="text-purple-600 text-xl font-bold">📚 Pustaka Taktis</div>
-            <p class="text-xs text-gray-500 mt-1">Diagnosa Gejala Hama & Penyakit Offline</p>
-          </router-link>
-        </div>
-
-        <!-- Quick Summary Widget based on role -->
-        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-          <h3 class="font-bold text-gray-800 text-sm mb-3">📌 Ringkasan Cepat Lapangan</h3>
-          
-          <div v-if="profileStore.activeRole === 'tani'" class="space-y-2 text-xs text-gray-700">
-            <div class="p-2.5 bg-agri-50 rounded-lg flex justify-between">
-              <span>Rekomendasi Sprayer:</span>
-              <span class="font-bold text-agri-700">16 Liter Tangki (Dosis Standar)</span>
-            </div>
-            <div class="p-2.5 bg-agri-50 rounded-lg flex justify-between">
-              <span>Status Kalender Tanam:</span>
-              <span class="font-bold text-agri-700">WTH Padi H-14 Sebelum Panen</span>
-            </div>
+            <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full">
+              Hari Ini
+            </span>
           </div>
 
-          <div v-else-if="profileStore.activeRole === 'tambak'" class="space-y-2 text-xs text-gray-700">
-            <div class="p-2.5 bg-aqua-50 rounded-lg flex justify-between">
-              <span>Target pH Optimal:</span>
-              <span class="font-bold text-aqua-700">7.5 - 8.2 (Stabil Pagi/Sore)</span>
-            </div>
-            <div class="p-2.5 bg-aqua-50 rounded-lg flex justify-between">
-              <span>Target FCR Udang/Ikan:</span>
-              <span class="font-bold text-aqua-700">&lt; 1.3 (Sangat Baik)</span>
-            </div>
+          <!-- Horizontal Date Picker Strip (Pill style like reference) -->
+          <div class="flex gap-2 justify-between overflow-x-auto no-scrollbar py-1">
+            <button
+              v-for="d in dateStrip"
+              :key="d.date"
+              @click="selectedDate = d.date"
+              type="button"
+              class="flex flex-col items-center justify-center w-12 py-2.5 rounded-2xl transition-all duration-200 cursor-pointer"
+              :class="selectedDate === d.date ? 'bg-brand-600 text-white shadow-soft scale-105 font-bold' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'"
+            >
+              <span class="text-sm leading-none font-bold">{{ d.date }}</span>
+              <span class="text-[10px] mt-1 leading-none opacity-80">{{ d.day }}</span>
+            </button>
           </div>
 
-          <div v-else class="space-y-2 text-xs text-gray-700">
-            <div class="p-2.5 bg-livestock-50 rounded-lg flex justify-between">
-              <span>Standar CP Ransum Sapi:</span>
-              <span class="font-bold text-livestock-700">12% - 16% Protein Kasar</span>
+          <!-- Vertical Timeline Rail (Screen 4 style) -->
+          <div class="space-y-3 pt-2">
+            <div class="flex items-start gap-3">
+              <span class="text-xs font-bold text-slate-400 w-12 pt-1">08.00</span>
+              <div class="flex-1 bg-emerald-50/70 border border-emerald-100/90 rounded-2xl p-3 shadow-soft">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-xs text-emerald-900">🌿 Semprot Fungisida Mankozeb</span>
+                  <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">Pagi</span>
+                </div>
+                <p class="text-[11px] text-emerald-700 mt-1">Dosis 16L Tangki (2 g/L) pada daun padi sebelum terik matahari.</p>
+              </div>
             </div>
-            <div class="p-2.5 bg-livestock-50 rounded-lg flex justify-between">
-              <span>Siklus IB Sapi/Kambing:</span>
-              <span class="font-bold text-livestock-700">21 Hari Siklus Birahi</span>
+
+            <div class="flex items-start gap-3">
+              <span class="text-xs font-bold text-slate-400 w-12 pt-1">11.00</span>
+              <div class="flex-1 bg-sky-50/70 border border-sky-100/90 rounded-2xl p-3 shadow-soft">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-xs text-sky-900">💧 Cek Salinitas & DO Kolam</span>
+                  <span class="text-[10px] font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full">Siang</span>
+                </div>
+                <p class="text-[11px] text-sky-700 mt-1">Pengukuran pH harian dan sirkulasi aerasi kincir air tambak.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <span class="text-xs font-bold text-slate-400 w-12 pt-1">16.00</span>
+              <div class="flex-1 bg-amber-50/70 border border-amber-100/90 rounded-2xl p-3 shadow-soft">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-xs text-amber-900">🌾 Ransum Pakan Sesi Sore</span>
+                  <span class="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Sore</span>
+                </div>
+                <p class="text-[11px] text-amber-700 mt-1">Pemberian konsentrat formula Pearson Square untuk ternak.</p>
+              </div>
             </div>
           </div>
         </div>
 
       </div>
     </ion-content>
-
   </ion-page>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { IonPage, IonContent } from '@ionic/vue';
 import AppHeader from '@/components/AppHeader.vue';
-
 import { useProfileStore } from '@/stores/useProfileStore';
 
+const router = useRouter();
 const profileStore = useProfileStore();
+const quickSearch = ref('');
 
-const bannerBgClass = computed(() => {
-  if (profileStore.activeRole === 'tani') return 'bg-agri-50 border-agri-200';
-  if (profileStore.activeRole === 'tambak') return 'bg-aqua-50 border-aqua-200';
-  return 'bg-livestock-50 border-livestock-200';
+const currentDate = new Date();
+const currentMonthYear = currentDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+const todayNum = currentDate.getDate();
+
+const selectedDate = ref(todayNum);
+
+// Generate 5-day calendar strip
+const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+const dateStrip = computed(() => {
+  const list = [];
+  for (let i = -1; i <= 4; i++) {
+    const d = new Date();
+    d.setDate(currentDate.getDate() + i);
+    list.push({
+      date: d.getDate(),
+      day: dayNames[d.getDay()]
+    });
+  }
+  return list;
 });
+
+function goToSearch() {
+  if (quickSearch.value.trim()) {
+    router.push({ path: '/library', query: { q: quickSearch.value } });
+  }
+}
 </script>
