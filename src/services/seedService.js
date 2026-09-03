@@ -1,13 +1,15 @@
 import { db } from './db';
 import knowledgeSeed from '../data/knowledgeSeed.json';
+import herbalSeed from '../data/herbalSeed.json';
 
 export async function initSeedData() {
   try {
     const count = await db.offline_knowledge.count();
     if (count === 0) {
       console.log('Seeding initial offline knowledge data...');
-      await db.offline_knowledge.bulkAdd(knowledgeSeed);
-      console.log(`Successfully seeded ${knowledgeSeed.length} knowledge items.`);
+      const seedData = [...knowledgeSeed, ...herbalSeed];
+      await db.offline_knowledge.bulkAdd(seedData);
+      console.log(`Successfully seeded ${seedData.length} knowledge items.`);
     }
 
     // Default profile check

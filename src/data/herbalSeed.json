@@ -1,0 +1,148 @@
+[
+  {
+    "id": "h1",
+    "category": "herbal",
+    "title": "Jahe Merah",
+    "symptom": "Masuk angin, batuk berdahak, mual, dan nyeri sendi.",
+    "solution": "Manfaat: menghangatkan tubuh, membantu meredakan mual, dan anti-inflamasi.",
+    "tags": [
+      "herbal",
+      "jahe",
+      "masuk angin",
+      "batuk"
+    ],
+    "parts": "Rimpang",
+    "recipe": {
+      "name": "Wedang Jahe Merah",
+      "ingredients": [
+        "2 ruas jahe merah, memarkan",
+        "2 batang serai",
+        "600 ml air",
+        "1 sdm madu"
+      ],
+      "steps": [
+        "Cuci dan memarkan jahe serta serai.",
+        "Rebus dengan air selama 15 menit.",
+        "Saring, tunggu hangat, lalu tambah madu."
+      ],
+      "dose": "1 gelas, 1–2x sehari",
+      "warning": "Hindari berlebihan jika punya tukak lambung; konsultasikan saat hamil."
+    }
+  },
+  {
+    "id": "h2",
+    "category": "herbal",
+    "title": "Kunyit",
+    "symptom": "Peradangan, maag ringan, nyeri haid, dan pencernaan kurang nyaman.",
+    "solution": "Manfaat: antioksidan, membantu mengurangi peradangan, dan mendukung pencernaan.",
+    "tags": [
+      "herbal",
+      "kunyit",
+      "maag",
+      "jamu"
+    ],
+    "parts": "Rimpang",
+    "recipe": {
+      "name": "Jamu Kunyit Asam",
+      "ingredients": [
+        "3 ruas kunyit, parut",
+        "1 sdm asam jawa",
+        "2 sdm gula aren",
+        "500 ml air"
+      ],
+      "steps": [
+        "Rebus kunyit dengan air selama 10 menit.",
+        "Masukkan asam jawa dan gula aren.",
+        "Saring dan minum setelah hangat."
+      ],
+      "dose": "1 gelas sehari setelah makan",
+      "warning": "Konsultasikan jika memakai pengencer darah atau memiliki gangguan empedu."
+    }
+  },
+  {
+    "id": "h3",
+    "category": "herbal",
+    "title": "Temulawak",
+    "symptom": "Nafsu makan kurang dan pencernaan lemak kurang baik.",
+    "solution": "Manfaat: mendukung fungsi hati dan membantu meningkatkan nafsu makan.",
+    "tags": [
+      "herbal",
+      "temulawak",
+      "hati",
+      "nafsu makan"
+    ],
+    "parts": "Rimpang",
+    "recipe": {
+      "name": "Rebusan Temulawak",
+      "ingredients": [
+        "3 ruas temulawak, iris",
+        "700 ml air",
+        "1 sdm madu"
+      ],
+      "steps": [
+        "Cuci dan iris temulawak.",
+        "Rebus 20 menit sampai tersisa sekitar 500 ml.",
+        "Saring dan tambahkan madu saat hangat."
+      ],
+      "dose": "125 ml, 2x sehari",
+      "warning": "Bukan pengganti terapi dokter; konsultasikan untuk ibu hamil/menyusui."
+    }
+  },
+  {
+    "id": "h4",
+    "category": "herbal",
+    "title": "Sambiloto",
+    "symptom": "Gejala flu, demam ringan, dan daya tahan tubuh menurun.",
+    "solution": "Manfaat: secara tradisional digunakan sebagai pendamping untuk demam dan flu.",
+    "tags": [
+      "herbal",
+      "sambiloto",
+      "demam",
+      "flu"
+    ],
+    "parts": "Daun dan batang",
+    "recipe": {
+      "name": "Seduhan Sambiloto",
+      "ingredients": [
+        "10 lembar daun sambiloto",
+        "500 ml air",
+        "1 sdm madu"
+      ],
+      "steps": [
+        "Cuci daun sampai bersih.",
+        "Rebus 15 menit.",
+        "Saring dan beri madu secukupnya."
+      ],
+      "dose": "1 gelas, maksimal 2x sehari selama 3 hari",
+      "warning": "Rasa sangat pahit. Jangan menggantikan obat dokter; cek interaksi obat diabetes/tekanan darah."
+    }
+  },
+  {
+    "id": "h5",
+    "category": "herbal",
+    "title": "Lidah Buaya",
+    "symptom": "Kulit kering, iritasi ringan, atau luka bakar ringan.",
+    "solution": "Manfaat: gel membantu melembapkan dan menenangkan kulit.",
+    "tags": [
+      "herbal",
+      "lidah buaya",
+      "kulit",
+      "gel"
+    ],
+    "parts": "Gel daun",
+    "recipe": {
+      "name": "Gel Lidah Buaya Topikal",
+      "ingredients": [
+        "1 lembar lidah buaya segar",
+        "Wadah bersih"
+      ],
+      "steps": [
+        "Cuci dan buang duri daun.",
+        "Ambil gel bening; buang getah kuning.",
+        "Uji sedikit pada kulit, lalu oleskan tipis."
+      ],
+      "dose": "Oleskan 2–3x sehari",
+      "warning": "Jangan gunakan pada luka dalam. Hentikan jika iritasi."
+    }
+  }
+]

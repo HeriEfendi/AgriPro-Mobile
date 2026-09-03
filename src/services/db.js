@@ -10,6 +10,15 @@ db.version(1).stores({
   offline_knowledge: '++id, category, symptom, solution, *tags'
 });
 
+// v2: add avatar (base64 DataURL) and nama_pengguna fields
+db.version(2).stores({
+  profiles: 'id, role, nama_lahan, nama_pengguna, avatar, unit_preference',
+  water_logs: '++id, timestamp, ph, salinity, temp, do_level, pond_id',
+  crop_schedules: '++id, crop_name, plant_date, wth_days, harvest_date',
+  breeding_logs: '++id, animal_tag, ib_date, expected_birth_date, vaccine_status',
+  offline_knowledge: '++id, category, symptom, solution, *tags'
+});
+
 /* Helper CRUD operations with error handling */
 
 // Water Logs
@@ -76,6 +85,9 @@ export async function searchKnowledge(query = '', category = 'all') {
   const q = query.toLowerCase().trim();
   return items.filter(item =>
     item.title?.toLowerCase().includes(q) ||
+    item.name?.toLowerCase().includes(q) ||
+    item.recipe?.name?.toLowerCase().includes(q) ||
+    item.recipe?.ingredients?.some(i => i.toLowerCase().includes(q)) ||
     item.symptom?.toLowerCase().includes(q) ||
     item.solution?.toLowerCase().includes(q) ||
     item.tags?.some(t => t.toLowerCase().includes(q))

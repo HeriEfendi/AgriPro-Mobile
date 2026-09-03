@@ -27,7 +27,7 @@ import { initSeedData } from '@/services/seedService';
 const app = createApp(App);
 const pinia = createPinia();
 
-app.use(IonicVue);
+app.use(IonicVue, { animated: false });
 app.use(pinia);
 app.use(router);
 

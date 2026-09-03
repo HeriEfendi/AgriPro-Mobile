@@ -1,6 +1,6 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <ion-router-outlet :animated="false" />
     <AppTabBar />
   </ion-app>
 </template>

@@ -185,6 +185,7 @@
                   >
                     <span v-if="item.category === 'agri'">🌾</span>
                     <span v-else-if="item.category === 'aqua'">🦐</span>
+                    <span v-else-if="item.category === 'herbal'">🌿</span>
                     <span v-else>🐄</span>
                   </div>
 
@@ -239,6 +240,25 @@
                   #{{ tag }}
                 </span>
               </div>
+
+              <button
+                v-if="item.recipe"
+                :id="`recipe-toggle-${item.id}`"
+                type="button"
+                class="w-full rounded-2xl bg-violet-50 px-3 py-2 text-left text-xs font-bold text-violet-700 transition hover:bg-violet-100"
+                :aria-expanded="expandedRecipes.has(item.id)"
+                @click="toggleRecipe(item.id)"
+              >
+                🌿 {{ expandedRecipes.has(item.id) ? 'Sembunyikan' : 'Lihat' }} cara meracik
+              </button>
+
+              <div v-if="item.recipe && expandedRecipes.has(item.id)" class="rounded-2xl border border-violet-100 bg-violet-50/50 p-3 text-xs text-slate-700 space-y-2">
+                <p class="font-bold text-violet-800">{{ item.recipe.name }}</p>
+                <div><strong>Bahan:</strong><ul class="list-disc pl-4"><li v-for="ingredient in item.recipe.ingredients" :key="ingredient">{{ ingredient }}</li></ul></div>
+                <div><strong>Cara membuat:</strong><ol class="list-decimal pl-4"><li v-for="step in item.recipe.steps" :key="step">{{ step }}</li></ol></div>
+                <p><strong>Dosis:</strong> {{ item.recipe.dose }}</p>
+                <p class="font-semibold text-rose-700"><strong>Peringatan:</strong> {{ item.recipe.warning }}</p>
+              </div>
             </div>
           </div>
 
@@ -258,20 +278,23 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
+import { useRoute } from 'vue-router';
 import AppHeader from '@/components/AppHeader.vue';
-
 import knowledgeSeedData from '@/data/knowledgeSeed.json';
+import herbalSeedData from '@/data/herbalSeed.json';
 import { searchKnowledge } from '@/services/db';
+
+const allSeedData = [...knowledgeSeedData, ...herbalSeedData];
 
 const route = useRoute();
 const searchQuery = ref('');
 const activeFilterTag = ref('');
 const activeCategory = ref('all');
-const filteredList = ref(knowledgeSeedData);
+const filteredList = ref(allSeedData);
 const favoriteIds = ref(new Set([1, 6]));
+const expandedRecipes = ref(new Set());
 
 function toggleFavorite(id) {
   if (favoriteIds.value.has(id)) {
@@ -292,15 +315,26 @@ function setFilterTag(tag) {
   performSearch();
 }
 
+function toggleRecipe(id) {
+  if (expandedRecipes.value.has(id)) expandedRecipes.value.delete(id);
+  else expandedRecipes.value.add(id);
+  expandedRecipes.value = new Set(expandedRecipes.value);
+}
+
 async function performSearch() {
   const query = (searchQuery.value || activeFilterTag.value || '').trim();
   try {
     const results = await searchKnowledge(query, activeCategory.value);
-    filteredList.value = results.length > 0 ? results : (query ? [] : knowledgeSeedData);
+    filteredList.value = results.length > 0 || query ? results : allSeedData;
   } catch (e) {
     console.error('Search error, fallbacking:', e);
-    filteredList.value = knowledgeSeedData;
+    filteredList.value = query ? allSeedData.filter(item => matchesItem(item, query)) : allSeedData;
   }
+}
+
+function matchesItem(item, query) {
+  const text = JSON.stringify(item).toLowerCase();
+  return text.includes(query.toLowerCase());
 }
 
 function onSearch() {
@@ -321,18 +355,21 @@ onMounted(() => {
 function getCategoryIconBg(category) {
   if (category === 'agri') return 'bg-emerald-50 text-emerald-600';
   if (category === 'aqua') return 'bg-sky-50 text-sky-600';
+  if (category === 'herbal') return 'bg-violet-50 text-violet-600';
   return 'bg-amber-50 text-amber-600';
 }
 
 function getCategoryBadgeClass(category) {
   if (category === 'agri') return 'bg-emerald-50 text-emerald-700 border border-emerald-200/60';
   if (category === 'aqua') return 'bg-sky-50 text-sky-700 border border-sky-200/60';
+  if (category === 'herbal') return 'bg-violet-50 text-violet-700 border border-violet-200/60';
   return 'bg-amber-50 text-amber-700 border border-amber-200/60';
 }
 
 function getCategoryLabel(category) {
   if (category === 'agri') return 'Pertanian';
   if (category === 'aqua') return 'Tambak';
-  return 'Ternak';
+  if (category === 'herbal') return 'Tanaman Herbal';
+  return 'Obat & Ternak';
 }
 </script>
