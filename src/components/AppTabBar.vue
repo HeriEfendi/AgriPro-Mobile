@@ -1,6 +1,6 @@
 <template>
   <div class="fixed bottom-0 left-0 right-0 z-50 pointer-events-none pb-[env(safe-area-inset-bottom,0px)] px-3 mb-2">
-    <div class="max-w-md mx-auto pointer-events-auto bg-white/95 backdrop-blur-xl border border-slate-100/90 rounded-3xl shadow-elevated px-2 py-2 flex items-center justify-between">
+    <div class="max-w-md mx-auto pointer-events-auto bg-white/95 backdrop-blur-xl border border-slate-100/90 rounded-3xl shadow-elevated px-1.5 py-1.5 flex items-center justify-around">
       
       <!-- Tab 1: Beranda -->
       <button
@@ -42,19 +42,7 @@
         </span>
       </button>
 
-      <!-- Center Action Button (+) -->
-      <div class="flex items-center justify-center px-1">
-        <button
-          type="button"
-          @click="openQuickAction"
-          class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center shadow-float active:scale-90 transition-all duration-200 hover:brightness-110 cursor-pointer outline-none"
-          title="Aksi Cepat & Konverter"
-        >
-          <ion-icon :icon="addOutline" class="text-2xl font-bold" />
-        </button>
-      </div>
-
-      <!-- Tab 3: Tambak / Ternak -->
+      <!-- Tab 3: Tambak -->
       <button
         type="button"
         @click="navigateTo('/aqua')"
@@ -74,7 +62,27 @@
         </span>
       </button>
 
-      <!-- Tab 4: Peternakan / Pustaka -->
+      <!-- Tab 4: Ternak -->
+      <button
+        type="button"
+        @click="navigateTo('/livestock')"
+        class="flex flex-col items-center justify-center flex-1 py-1 transition-all duration-200 active:scale-90 cursor-pointer outline-none group"
+      >
+        <div
+          class="w-10 h-7 rounded-full flex items-center justify-center transition-all duration-200"
+          :class="isActive('/livestock') ? 'bg-amber-50 text-amber-600' : 'text-slate-400 group-hover:text-slate-600'"
+        >
+          <ion-icon :icon="pawOutline" class="text-xl" />
+        </div>
+        <span
+          class="text-[10px] font-semibold mt-0.5 tracking-tight transition-colors duration-200"
+          :class="isActive('/livestock') ? 'text-amber-700 font-bold' : 'text-slate-400'"
+        >
+          Ternak
+        </span>
+      </button>
+
+      <!-- Tab 5: Pustaka -->
       <button
         type="button"
         @click="navigateTo('/library')"
@@ -95,26 +103,17 @@
       </button>
 
     </div>
-
-    <!-- Quick Action Modal -->
-    <UnitConverterModal
-      :is-open="showQuickModal"
-      @close="showQuickModal = false"
-    />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { IonIcon } from '@ionic/vue';
-import { homeOutline, leafOutline, waterOutline, bookOutline, addOutline } from 'ionicons/icons';
+import { homeOutline, leafOutline, waterOutline, pawOutline, bookOutline } from 'ionicons/icons';
 import { triggerHapticImpact } from '@/utils/haptics';
-import UnitConverterModal from './UnitConverterModal.vue';
 
 const route = useRoute();
 const router = useRouter();
-const showQuickModal = ref(false);
 
 function isActive(path) {
   return route.path === path;
@@ -125,10 +124,5 @@ function navigateTo(path) {
   if (route.path !== path) {
     router.push(path);
   }
-}
-
-function openQuickAction() {
-  triggerHapticImpact();
-  showQuickModal.value = true;
 }
 </script>

@@ -34,6 +34,7 @@
               <label class="label-field text-emerald-800">Ubin (~14 m²)</label>
               <input
                 type="number"
+                min="0"
                 v-model="ubinInput"
                 @input="onUbinChange"
                 placeholder="0"
@@ -44,6 +45,7 @@
               <label class="label-field text-emerald-800">Bahu (~7.000 m²)</label>
               <input
                 type="number"
+                min="0"
                 v-model="bahuInput"
                 @input="onBahuChange"
                 placeholder="0"
@@ -75,6 +77,7 @@
               <label class="label-field text-sky-800">Gembor (~10 L)</label>
               <input
                 type="number"
+                min="0"
                 v-model="gemborInput"
                 @input="onGemborChange"
                 placeholder="0"
@@ -85,6 +88,7 @@
               <label class="label-field text-sky-800">Sendok Makan (~15 ml)</label>
               <input
                 type="number"
+                min="0"
                 v-model="sendokInput"
                 @input="onSendokChange"
                 placeholder="0"
@@ -115,6 +119,7 @@
             <label class="label-field text-amber-800">Kadar ppm (mg/L atau g/m³)</label>
             <input
               type="number"
+              min="0"
               v-model="ppmInput"
               placeholder="Masukkan angka ppm"
               class="input-field border-amber-200 focus:border-amber-500"
@@ -130,8 +135,11 @@
       </div>
 
       <!-- Modal Footer Action -->
-      <div class="p-4 border-t border-slate-100 bg-white">
-        <button @click="closeModal" class="btn-brand">
+      <div class="p-4 border-t border-slate-100 bg-white flex gap-2">
+        <button @click="resetInputs" class="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer">
+          Reset
+        </button>
+        <button @click="closeModal" class="btn-brand flex-1">
           Tutup Konverter
         </button>
       </div>
@@ -185,6 +193,16 @@ function onGemborChange() {
 function onSendokChange() {
   gemborInput.value = '';
   mlVal.value = sendokToMl(sendokInput.value);
+}
+
+function resetInputs() {
+  ubinInput.value = '';
+  bahuInput.value = '';
+  m2Val.value = 0;
+  gemborInput.value = '';
+  sendokInput.value = '';
+  mlVal.value = 0;
+  ppmInput.value = '';
 }
 
 const m2Result = computed(() => Number(m2Val.value.toFixed(2)));

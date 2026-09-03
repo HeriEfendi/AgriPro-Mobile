@@ -33,19 +33,33 @@
             <div class="grid grid-cols-2 gap-3 text-xs">
               <div>
                 <label class="label-field">Dosis per Ha (ml/g)</label>
-                <input v-model.number="dosePerHa" type="number" placeholder="1000" class="input-field" />
+                <input v-model.number="dosePerHa" type="number" min="0" placeholder="1000" class="input-field" />
               </div>
               <div>
                 <label class="label-field">Luas Lahan (m²)</label>
-                <input v-model.number="areaM2" type="number" placeholder="1400" class="input-field" />
+                <input v-model.number="areaM2" type="number" min="0" placeholder="1400" class="input-field" />
               </div>
               <div>
-                <label class="label-field">Kapasitas Tangki (L)</label>
-                <input v-model.number="tankCapacityL" type="number" placeholder="16" class="input-field" />
+                <div class="flex justify-between items-center">
+                  <label class="label-field">Kapasitas Tangki (L)</label>
+                  <div class="flex gap-1">
+                    <button
+                      v-for="cap in [14, 16, 20]"
+                      :key="cap"
+                      type="button"
+                      @click="tankCapacityL = cap"
+                      :class="tankCapacityL === cap ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                      class="text-[10px] px-1.5 py-0.5 rounded transition cursor-pointer"
+                    >
+                      {{ cap }}L
+                    </button>
+                  </div>
+                </div>
+                <input v-model.number="tankCapacityL" type="number" min="1" placeholder="16" class="input-field" />
               </div>
               <div>
                 <label class="label-field">Vol Semprot/Ha (L)</label>
-                <input v-model.number="sprayVolumePerHaL" type="number" placeholder="400" class="input-field" />
+                <input v-model.number="sprayVolumePerHaL" type="number" min="1" placeholder="400" class="input-field" />
               </div>
             </div>
 
@@ -86,6 +100,22 @@
               <div>
                 <label class="label-field">Bahan Aktif B</label>
                 <input v-model="ingredientB" placeholder="misal: Abamektin" class="input-field" />
+              </div>
+            </div>
+
+            <!-- Quick ingredient buttons -->
+            <div class="space-y-1">
+              <span class="text-[10px] text-slate-400 block font-medium">Bahan terdaftar (klik untuk memasukkan):</span>
+              <div class="flex flex-wrap gap-1">
+                <button
+                  v-for="ing in quickIngredients"
+                  :key="ing"
+                  type="button"
+                  @click="fillIngredient(ing)"
+                  class="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full transition active:scale-95"
+                >
+                  + {{ ing }}
+                </button>
               </div>
             </div>
 
@@ -239,6 +269,25 @@ const agrimixResult = computed(() => {
 const ingredientA = ref('Mankozeb');
 const ingredientB = ref('Abamektin');
 
+const quickIngredients = [
+  'Mankozeb',
+  'Abamektin',
+  'Tebuconazole',
+  'Imidakloprid',
+  'Emamektin Benzoat',
+  'Tembaga Hidroksida',
+  'Organofosfat',
+  'Pupuk Daun Tinggi Nitrogen'
+];
+
+function fillIngredient(name) {
+  if (!ingredientA.value || ingredientA.value === name) {
+    ingredientA.value = name;
+  } else {
+    ingredientB.value = name;
+  }
+}
+
 const compatibilityResult = computed(() => {
   return checkChemicalCompatibility(ingredientA.value, ingredientB.value);
 });
@@ -277,11 +326,16 @@ async function saveSchedule() {
     wth_days: wthDays.value
   });
 
+  // Calculate accurate target WTH date
+  const [py, pm, pd] = (plantDate.value || new Date().toISOString().substring(0, 10)).split('-').map(Number);
+  const targetDate = new Date(py, pm - 1, pd);
+  targetDate.setDate(targetDate.getDate() + (Number(wthDays.value) || 14));
+
   await scheduleNotification({
     id: newId,
     title: `⚠️ Pengingat WTH ${cropName.value}`,
     body: `Masa Waktu Henti Hama (WTH) ${wthDays.value} hari telah selesai. Tanaman siap dipanen dengan aman!`,
-    scheduleDate: new Date(Date.now() + 10000)
+    scheduleDate: targetDate
   });
 
   await loadSchedules();

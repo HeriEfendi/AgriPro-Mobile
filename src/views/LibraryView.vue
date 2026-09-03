@@ -25,19 +25,63 @@
           </button>
         </div>
 
-        <!-- Categories Section (4x2 Grid with pastel rounded circles matching Screen 2) -->
+        <!-- Category Pills (Semua, Pertanian, Tambak, Ternak, Herbal) -->
+        <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
+          <button
+            type="button"
+            @click="setCategory('all')"
+            :class="activeCategory === 'all' ? 'bg-brand-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
+          >
+            ✨ Semua ({{ allSeedData.length }})
+          </button>
+          <button
+            type="button"
+            @click="setCategory('agri')"
+            :class="activeCategory === 'agri' ? 'bg-emerald-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
+          >
+            🌾 Pertanian
+          </button>
+          <button
+            type="button"
+            @click="setCategory('aqua')"
+            :class="activeCategory === 'aqua' ? 'bg-sky-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
+          >
+            🦐 Tambak
+          </button>
+          <button
+            type="button"
+            @click="setCategory('livestock')"
+            :class="activeCategory === 'livestock' ? 'bg-amber-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
+          >
+            🐄 Peternakan
+          </button>
+          <button
+            type="button"
+            @click="setCategory('herbal')"
+            :class="activeCategory === 'herbal' ? 'bg-violet-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
+          >
+            🌿 Tanaman Herbal
+          </button>
+        </div>
+
+        <!-- Categories Section (Grid matching Screen 2) -->
         <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
           <div class="flex justify-between items-center">
             <h2 class="text-sm font-bold text-slate-900">Kategori Komoditas</h2>
             <button
-              @click="setFilterTag('')"
+              @click="resetFilter"
               class="text-xs font-semibold text-brand-600 hover:text-brand-700"
             >
               Reset Filter
             </button>
           </div>
 
-          <div class="grid grid-cols-4 gap-3 text-center">
+          <div class="grid grid-cols-3 sm:grid-cols-5 gap-2.5 text-center">
             <!-- 1. Padi -->
             <button
               @click="setFilterTag('padi')"
@@ -45,7 +89,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'padi' ? 'bg-emerald-600 text-white shadow-soft ring-2 ring-emerald-400' : 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100'"
               >
                 🌾
@@ -60,7 +104,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'jagung' ? 'bg-amber-500 text-white shadow-soft ring-2 ring-amber-400' : 'bg-amber-50 text-amber-600 group-hover:bg-amber-100'"
               >
                 🌽
@@ -75,7 +119,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'cabai' ? 'bg-rose-500 text-white shadow-soft ring-2 ring-rose-400' : 'bg-rose-50 text-rose-600 group-hover:bg-rose-100'"
               >
                 🌶️
@@ -90,7 +134,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'udang' ? 'bg-sky-600 text-white shadow-soft ring-2 ring-sky-400' : 'bg-sky-50 text-sky-600 group-hover:bg-sky-100'"
               >
                 🦐
@@ -105,7 +149,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'ikan' ? 'bg-blue-600 text-white shadow-soft ring-2 ring-blue-400' : 'bg-blue-50 text-blue-600 group-hover:bg-blue-100'"
               >
                 🐟
@@ -120,7 +164,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'sapi' ? 'bg-amber-600 text-white shadow-soft ring-2 ring-amber-500' : 'bg-amber-100/70 text-amber-700 group-hover:bg-amber-200/70'"
               >
                 🐄
@@ -135,7 +179,7 @@
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'kambing' ? 'bg-emerald-700 text-white shadow-soft ring-2 ring-emerald-500' : 'bg-emerald-100/70 text-emerald-800 group-hover:bg-emerald-200/70'"
               >
                 🐐
@@ -143,14 +187,29 @@
               <span class="text-[11px] font-semibold mt-1 text-slate-700">Kambing</span>
             </button>
 
-            <!-- 8. Obat & Kimia -->
+            <!-- 8. Herbal -->
+            <button
+              @click="setFilterTag('herbal')"
+              type="button"
+              class="flex flex-col items-center group active:scale-95 transition"
+            >
+              <div
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                :class="activeFilterTag === 'herbal' ? 'bg-violet-600 text-white shadow-soft ring-2 ring-violet-400' : 'bg-violet-50 text-violet-600 group-hover:bg-violet-100'"
+              >
+                🌿
+              </div>
+              <span class="text-[11px] font-semibold mt-1 text-slate-700">Herbal</span>
+            </button>
+
+            <!-- 9. Obat & Kimia -->
             <button
               @click="setFilterTag('obat')"
               type="button"
               class="flex flex-col items-center group active:scale-95 transition"
             >
               <div
-                class="w-13 h-13 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
+                class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-200"
                 :class="activeFilterTag === 'obat' ? 'bg-purple-600 text-white shadow-soft ring-2 ring-purple-400' : 'bg-purple-50 text-purple-600 group-hover:bg-purple-100'"
               >
                 💊
@@ -315,6 +374,18 @@ function setFilterTag(tag) {
   performSearch();
 }
 
+function setCategory(cat) {
+  activeCategory.value = cat;
+  performSearch();
+}
+
+function resetFilter() {
+  activeCategory.value = 'all';
+  activeFilterTag.value = '';
+  searchQuery.value = '';
+  performSearch();
+}
+
 function toggleRecipe(id) {
   if (expandedRecipes.value.has(id)) expandedRecipes.value.delete(id);
   else expandedRecipes.value.add(id);
@@ -325,16 +396,31 @@ async function performSearch() {
   const query = (searchQuery.value || activeFilterTag.value || '').trim();
   try {
     const results = await searchKnowledge(query, activeCategory.value);
-    filteredList.value = results.length > 0 || query ? results : allSeedData;
+    filteredList.value = results;
   } catch (e) {
     console.error('Search error, fallbacking:', e);
-    filteredList.value = query ? allSeedData.filter(item => matchesItem(item, query)) : allSeedData;
+    filteredList.value = allSeedData.filter(item => {
+      const matchCat = activeCategory.value === 'all' || item.category === activeCategory.value;
+      const matchQ = !query || matchesItem(item, query);
+      return matchCat && matchQ;
+    });
   }
 }
 
 function matchesItem(item, query) {
-  const text = JSON.stringify(item).toLowerCase();
-  return text.includes(query.toLowerCase());
+  const q = query.toLowerCase();
+  return (
+    item.title?.toLowerCase().includes(q) ||
+    item.name?.toLowerCase().includes(q) ||
+    item.parts?.toLowerCase().includes(q) ||
+    item.recipe?.name?.toLowerCase().includes(q) ||
+    item.recipe?.ingredients?.some(i => i.toLowerCase().includes(q)) ||
+    item.recipe?.dose?.toLowerCase().includes(q) ||
+    item.recipe?.warning?.toLowerCase().includes(q) ||
+    item.symptom?.toLowerCase().includes(q) ||
+    item.solution?.toLowerCase().includes(q) ||
+    item.tags?.some(t => t.toLowerCase().includes(q))
+  );
 }
 
 function onSearch() {

@@ -104,6 +104,9 @@
                 <select v-model="animalType" class="select-field">
                   <option value="sapi">Sapi (~283 Hari Kebuntingan)</option>
                   <option value="kambing">Kambing (~150 Hari Kebuntingan)</option>
+                  <option value="domba">Domba (~150 Hari Kebuntingan)</option>
+                  <option value="kerbau">Kerbau (~310 Hari Kebuntingan)</option>
+                  <option value="kelinci">Kelinci (~31 Hari Kebuntingan)</option>
                 </select>
               </div>
               <div class="col-span-2">
@@ -167,7 +170,7 @@ import AppHeader from '@/components/AppHeader.vue';
 import { calculatePearsonSquare } from '@/utils/calculators/feedBlenderCalc';
 import { addBreedingLog, getAllBreedingLogs, deleteBreedingLog } from '@/services/db';
 import { scheduleNotification } from '@/services/notificationService';
-import { triggerHapticImpact } from '@/utils/haptics';
+import { triggerHapticImpact, triggerHapticSuccess } from '@/utils/haptics';
 
 const selectedSegment = ref('blender');
 
@@ -196,12 +199,26 @@ const animalType = ref('sapi');
 const ibDate = ref(new Date().toISOString().substring(0, 10));
 const breedingList = ref([]);
 
+const gestationMap = {
+  sapi: 283,
+  kambing: 150,
+  domba: 150,
+  kerbau: 310,
+  kelinci: 31
+};
+
 const expectedBirthDate = computed(() => {
   if (!ibDate.value) return '-';
-  const date = new Date(ibDate.value);
-  const gestationDays = animalType.value === 'sapi' ? 283 : 150;
+  const parts = ibDate.value.split('-').map(Number);
+  if (parts.length !== 3 || parts.some(isNaN)) return '-';
+  const [y, m, d] = parts;
+  const date = new Date(y, m - 1, d);
+  const gestationDays = gestationMap[animalType.value] || 283;
   date.setDate(date.getDate() + gestationDays);
-  return date.toISOString().substring(0, 10);
+  const resY = date.getFullYear();
+  const resM = String(date.getMonth() + 1).padStart(2, '0');
+  const resD = String(date.getDate()).padStart(2, '0');
+  return `${resY}-${resM}-${resD}`;
 });
 
 async function loadBreedingLogs() {
@@ -209,6 +226,7 @@ async function loadBreedingLogs() {
 }
 
 async function saveBreedingLog() {
+  await triggerHapticSuccess();
   const newId = await addBreedingLog({
     animal_tag: animalTag.value,
     animal_type: animalType.value,
@@ -217,18 +235,20 @@ async function saveBreedingLog() {
     vaccine_status: 'Lengkap'
   });
 
-  // Schedule Local Notification for Birth
+  // Schedule notification for accurate birth date
+  const targetDate = new Date(expectedBirthDate.value);
   await scheduleNotification({
     id: newId,
     title: `🐄 Pengingat Perkiraan Lahir ${animalTag.value}`,
     body: `Ternak ${animalTag.value} diperkirakan melahirkan pada ${expectedBirthDate.value}. Siapkan kandang kelahiran!`,
-    scheduleDate: new Date(Date.now() + 10000)
+    scheduleDate: targetDate
   });
 
   await loadBreedingLogs();
 }
 
 async function removeBreedingLog(id) {
+  await triggerHapticImpact();
   await deleteBreedingLog(id);
   await loadBreedingLogs();
 }

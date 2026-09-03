@@ -375,8 +375,31 @@ function onFileSelected(event) {
 
   const reader = new FileReader();
   reader.onload = (e) => {
-    form.avatarPreview = e.target.result;
-    selectedPresetEmoji.value = null; // clear preset selection
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxDim = 256;
+      let width = img.width;
+      let height = img.height;
+      if (width > height) {
+        if (width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        }
+      } else {
+        if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      form.avatarPreview = canvas.toDataURL('image/jpeg', 0.85);
+      selectedPresetEmoji.value = null; // clear preset selection
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
   event.target.value = '';

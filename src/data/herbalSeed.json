@@ -1,6 +1,6 @@
 [
   {
-    "id": "h1",
+    "id": 13,
     "category": "herbal",
     "title": "Jahe Merah",
     "symptom": "Masuk angin, batuk berdahak, mual, dan nyeri sendi.",
@@ -30,7 +30,7 @@
     }
   },
   {
-    "id": "h2",
+    "id": 14,
     "category": "herbal",
     "title": "Kunyit",
     "symptom": "Peradangan, maag ringan, nyeri haid, dan pencernaan kurang nyaman.",
@@ -60,7 +60,7 @@
     }
   },
   {
-    "id": "h3",
+    "id": 15,
     "category": "herbal",
     "title": "Temulawak",
     "symptom": "Nafsu makan kurang dan pencernaan lemak kurang baik.",
@@ -89,7 +89,7 @@
     }
   },
   {
-    "id": "h4",
+    "id": 16,
     "category": "herbal",
     "title": "Sambiloto",
     "symptom": "Gejala flu, demam ringan, dan daya tahan tubuh menurun.",
@@ -118,7 +118,7 @@
     }
   },
   {
-    "id": "h5",
+    "id": 17,
     "category": "herbal",
     "title": "Lidah Buaya",
     "symptom": "Kulit kering, iritasi ringan, atau luka bakar ringan.",

@@ -4,12 +4,12 @@ import herbalSeed from '../data/herbalSeed.json';
 
 export async function initSeedData() {
   try {
-    const count = await db.offline_knowledge.count();
-    if (count === 0) {
-      console.log('Seeding initial offline knowledge data...');
-      const seedData = [...knowledgeSeed, ...herbalSeed];
-      await db.offline_knowledge.bulkAdd(seedData);
-      console.log(`Successfully seeded ${seedData.length} knowledge items.`);
+    const existingCount = await db.offline_knowledge.count();
+    const seedData = [...knowledgeSeed, ...herbalSeed];
+    if (existingCount < seedData.length) {
+      console.log('Syncing offline knowledge seed data...');
+      await db.offline_knowledge.bulkPut(seedData);
+      console.log(`Successfully synced ${seedData.length} knowledge items.`);
     }
 
     // Default profile check
@@ -19,6 +19,8 @@ export async function initSeedData() {
         id: 'default',
         role: 'tani',
         nama_lahan: 'Lahan Utama',
+        nama_pengguna: 'Pengguna AgriPro',
+        avatar: null,
         unit_preference: {
           area: 'm2',
           volume: 'ml',

@@ -31,13 +31,30 @@ const props = defineProps({
 });
 
 const chartData = computed(() => {
-  const labels = props.logs.map(l => l.date || l.timestamp || 'Day');
-  const phData = props.logs.map(l => l.ph);
-  const tempData = props.logs.map(l => l.temp);
-  const doData = props.logs.map(l => l.do_level);
+  // Chronological order: oldest to newest for time-series display
+  const orderedLogs = [...props.logs].reverse();
+
+  const labels = orderedLogs.length ? orderedLogs.map((l, idx) => {
+    if (l.date) return l.date;
+    if (l.timestamp) {
+      const d = new Date(l.timestamp);
+      if (!isNaN(d.getTime())) {
+        const day = d.getDate();
+        const mon = d.getMonth() + 1;
+        const hr = d.getHours().toString().padStart(2, '0');
+        const min = d.getMinutes().toString().padStart(2, '0');
+        return `${day}/${mon} ${hr}:${min}`;
+      }
+    }
+    return `Log ${idx + 1}`;
+  }) : ['Hari 1', 'Hari 2', 'Hari 3', 'Hari 4', 'Hari 5'];
+
+  const phData = orderedLogs.map(l => l.ph);
+  const tempData = orderedLogs.map(l => l.temp);
+  const doData = orderedLogs.map(l => l.do_level);
 
   return {
-    labels: labels.length ? labels : ['Hari 1', 'Hari 2', 'Hari 3', 'Hari 4', 'Hari 5'],
+    labels,
     datasets: [
       {
         label: 'pH Air',

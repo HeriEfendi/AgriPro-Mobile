@@ -233,7 +233,7 @@ import WaterChart from '@/components/charts/WaterChart.vue';
 import GrowthChart from '@/components/charts/GrowthChart.vue';
 import { calculateFCR, calculateDailyFeed, calculateADG } from '@/utils/calculators/aquaFcrCalc';
 import { addWaterLog, getAllWaterLogs, deleteWaterLog } from '@/services/db';
-import { triggerHapticImpact } from '@/utils/haptics';
+import { triggerHapticImpact, triggerHapticSuccess } from '@/utils/haptics';
 
 const selectedSegment = ref('water');
 
@@ -247,11 +247,12 @@ const waterLogList = ref([]);
 async function loadWaterLogs() {
   let logs = await getAllWaterLogs();
   if (logs.length === 0) {
+    const now = Date.now();
     const initialSamples = [
-      { ph: 7.2, temp: 28.5, salinity: 15, do_level: 5.2, pond_id: 'Kolam Utama' },
-      { ph: 7.5, temp: 29.0, salinity: 15, do_level: 4.8, pond_id: 'Kolam Utama' },
-      { ph: 6.8, temp: 28.2, salinity: 14, do_level: 5.5, pond_id: 'Kolam Utama' },
-      { ph: 7.4, temp: 29.5, salinity: 15, do_level: 5.1, pond_id: 'Kolam Utama' }
+      { ph: 7.2, temp: 28.5, salinity: 15, do_level: 5.2, pond_id: 'Kolam Utama', timestamp: new Date(now - 3 * 86400000).toISOString() },
+      { ph: 7.5, temp: 29.0, salinity: 15, do_level: 4.8, pond_id: 'Kolam Utama', timestamp: new Date(now - 2 * 86400000).toISOString() },
+      { ph: 6.8, temp: 28.2, salinity: 14, do_level: 5.5, pond_id: 'Kolam Utama', timestamp: new Date(now - 1 * 86400000).toISOString() },
+      { ph: 7.4, temp: 29.5, salinity: 15, do_level: 5.1, pond_id: 'Kolam Utama', timestamp: new Date(now).toISOString() }
     ];
     for (const sample of initialSamples) {
       await addWaterLog(sample);
@@ -262,6 +263,7 @@ async function loadWaterLogs() {
 }
 
 async function saveWaterLog() {
+  await triggerHapticSuccess();
   await addWaterLog({
     ph: phVal.value,
     temp: tempVal.value,

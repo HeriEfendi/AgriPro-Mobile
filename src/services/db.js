@@ -74,7 +74,7 @@ export async function searchKnowledge(query = '', category = 'all') {
   let collection = db.offline_knowledge;
   let items = await collection.toArray();
 
-  if (category !== 'all') {
+  if (category && category !== 'all') {
     items = items.filter(item => item.category === category);
   }
 
@@ -86,8 +86,11 @@ export async function searchKnowledge(query = '', category = 'all') {
   return items.filter(item =>
     item.title?.toLowerCase().includes(q) ||
     item.name?.toLowerCase().includes(q) ||
+    item.parts?.toLowerCase().includes(q) ||
     item.recipe?.name?.toLowerCase().includes(q) ||
     item.recipe?.ingredients?.some(i => i.toLowerCase().includes(q)) ||
+    item.recipe?.dose?.toLowerCase().includes(q) ||
+    item.recipe?.warning?.toLowerCase().includes(q) ||
     item.symptom?.toLowerCase().includes(q) ||
     item.solution?.toLowerCase().includes(q) ||
     item.tags?.some(t => t.toLowerCase().includes(q))

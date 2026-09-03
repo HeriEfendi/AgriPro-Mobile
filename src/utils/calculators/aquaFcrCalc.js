@@ -9,12 +9,16 @@
  * @param {number} initialBiomassKg - Total biomassa awal tebar (kg), default 0
  */
 export function calculateFCR(totalFeedKg, finalBiomassKg, initialBiomassKg = 0) {
-  const netWeightGainKg = finalBiomassKg - initialBiomassKg;
-  if (netWeightGainKg <= 0 || totalFeedKg < 0) {
-    return { fcr: 0, status: 'INVALID', description: 'Biomassa akhir harus lebih besar dari biomassa awal.' };
+  const safeFeed = Math.max(0, parseFloat(totalFeedKg) || 0);
+  const safeFinal = Math.max(0, parseFloat(finalBiomassKg) || 0);
+  const safeInitial = Math.max(0, parseFloat(initialBiomassKg) || 0);
+
+  const netWeightGainKg = safeFinal - safeInitial;
+  if (netWeightGainKg <= 0 || safeFeed <= 0) {
+    return { fcr: 0, status: 'INVALID', description: 'Biomassa akhir harus lebih besar dari biomassa awal dan pakan harus > 0.' };
   }
 
-  const fcr = totalFeedKg / netWeightGainKg;
+  const fcr = safeFeed / netWeightGainKg;
   let status = 'GOOD';
   let description = 'Nilai FCR normal dan efisien.';
 
@@ -41,8 +45,12 @@ export function calculateFCR(totalFeedKg, finalBiomassKg, initialBiomassKg = 0) 
  * @param {number} feedingRatePercent - Persentase feeding rate harian (1.5% - 5% dari biomassa)
  */
 export function calculateDailyFeed(population, abwGram, feedingRatePercent = 3) {
-  const totalBiomassKg = (population * abwGram) / 1000;
-  const dailyFeedKg = totalBiomassKg * (feedingRatePercent / 100);
+  const safePop = Math.max(0, parseFloat(population) || 0);
+  const safeAbw = Math.max(0, parseFloat(abwGram) || 0);
+  const safeFr = Math.max(0, parseFloat(feedingRatePercent) || 3);
+
+  const totalBiomassKg = (safePop * safeAbw) / 1000;
+  const dailyFeedKg = totalBiomassKg * (safeFr / 100);
 
   return {
     totalBiomassKg: Number(totalBiomassKg.toFixed(2)),
@@ -59,12 +67,12 @@ export function calculateDailyFeed(population, abwGram, feedingRatePercent = 3) 
  * @param {number} daysCount - Jarak hari antara 2 kali sampling
  */
 export function calculateADG(weightEndGram, weightStartGram, daysCount) {
-  if (!daysCount || daysCount <= 0) {
-    return { adgGramPerDay: 0 };
-  }
+  const safeEnd = parseFloat(weightEndGram) || 0;
+  const safeStart = parseFloat(weightStartGram) || 0;
+  const safeDays = Math.max(1, parseFloat(daysCount) || 1);
 
-  const weightGain = weightEndGram - weightStartGram;
-  const adgGramPerDay = weightGain / daysCount;
+  const weightGain = safeEnd - safeStart;
+  const adgGramPerDay = weightGain / safeDays;
 
   return {
     weightGainGram: Number(weightGain.toFixed(2)),
