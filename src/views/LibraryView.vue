@@ -25,20 +25,28 @@
           </button>
         </div>
 
-        <!-- Category Pills (Semua, Pertanian, Tambak, Ternak, Herbal) -->
+        <!-- Category Pills (Semua, Pertanian, Tambak, Ternak, Herbal, Favorit) -->
         <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
           <button
             type="button"
             @click="setCategory('all')"
-            :class="activeCategory === 'all' ? 'bg-brand-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            :class="activeCategory === 'all' && !onlyFavorites ? 'bg-brand-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
             class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
           >
             ✨ Semua ({{ allSeedData.length }})
           </button>
           <button
             type="button"
+            @click="toggleFavoriteFilter"
+            :class="onlyFavorites ? 'bg-rose-500 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer flex items-center gap-1"
+          >
+            <span>★</span> Favorit ({{ favoriteIds.size }})
+          </button>
+          <button
+            type="button"
             @click="setCategory('agri')"
-            :class="activeCategory === 'agri' ? 'bg-emerald-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            :class="activeCategory === 'agri' && !onlyFavorites ? 'bg-emerald-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
             class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
           >
             🌾 Pertanian
@@ -46,7 +54,7 @@
           <button
             type="button"
             @click="setCategory('aqua')"
-            :class="activeCategory === 'aqua' ? 'bg-sky-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            :class="activeCategory === 'aqua' && !onlyFavorites ? 'bg-sky-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
             class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
           >
             🦐 Tambak
@@ -54,7 +62,7 @@
           <button
             type="button"
             @click="setCategory('livestock')"
-            :class="activeCategory === 'livestock' ? 'bg-amber-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            :class="activeCategory === 'livestock' && !onlyFavorites ? 'bg-amber-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
             class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
           >
             🐄 Peternakan
@@ -62,12 +70,22 @@
           <button
             type="button"
             @click="setCategory('herbal')"
-            :class="activeCategory === 'herbal' ? 'bg-violet-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
+            :class="activeCategory === 'herbal' && !onlyFavorites ? 'bg-violet-600 text-white font-bold shadow-soft' : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'"
             class="px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap transition active:scale-95 cursor-pointer"
           >
             🌿 Tanaman Herbal
           </button>
         </div>
+
+        <!-- Toast Feedback Banner -->
+        <transition name="fade">
+          <div
+            v-if="toastMessage"
+            class="fixed top-16 left-1/2 -translate-x-1/2 z-[100] bg-slate-900/90 text-white px-4 py-2 rounded-full text-xs font-semibold shadow-elevated flex items-center gap-2 backdrop-blur-md"
+          >
+            <span>✅</span> {{ toastMessage }}
+          </div>
+        </transition>
 
         <!-- Categories Section (Grid matching Screen 2) -->
         <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
@@ -225,17 +243,18 @@
             <h2 class="text-sm font-bold text-slate-900">
               Daftar Diagnosa & Panduan Taktis
             </h2>
-            <span class="text-xs text-slate-400 font-medium">{{ filteredList.length }} Panduan</span>
+            <span class="text-xs text-slate-400 font-medium">{{ displayedList.length }} Panduan</span>
           </div>
 
           <!-- List of Disease / Diagnostic Cards -->
-          <div v-if="filteredList.length > 0" class="space-y-3">
+          <div v-if="displayedList.length > 0" class="space-y-3">
             <div
-              v-for="item in filteredList"
+              v-for="item in displayedList"
               :key="item.id"
-              class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card hover:shadow-elevated transition-all duration-200 space-y-3"
+              class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-card hover:shadow-elevated transition-all duration-200 space-y-3 cursor-pointer"
+              @click="openDetail(item)"
             >
-              <!-- Card Header: Avatar + Title + Rating + Bookmark Heart -->
+              <!-- Card Header: Avatar + Title + Rating + Actions -->
               <div class="flex items-start justify-between gap-3">
                 <div class="flex items-center gap-3">
                   <div
@@ -264,29 +283,45 @@
                   </div>
                 </div>
 
-                <!-- Heart Bookmark Button -->
-                <button
-                  @click="toggleFavorite(item.id)"
-                  type="button"
-                  class="w-8 h-8 rounded-full flex items-center justify-center transition active:scale-90"
-                  :class="favoriteIds.has(item.id) ? 'bg-rose-50 text-rose-500' : 'bg-slate-50 text-slate-300 hover:text-slate-400'"
-                >
-                  <svg class="w-4 h-4" :fill="favoriteIds.has(item.id) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                  </svg>
-                </button>
+                <!-- Top Right Action Buttons: Share & Favorite -->
+                <div class="flex items-center gap-1" @click.stop>
+                  <!-- Share button -->
+                  <button
+                    @click="onShareItem(item)"
+                    type="button"
+                    class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-500 flex items-center justify-center transition active:scale-90"
+                    title="Bagikan Panduan"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                  </button>
+
+                  <!-- Heart Bookmark Button -->
+                  <button
+                    @click="toggleFavorite(item.id)"
+                    type="button"
+                    class="w-8 h-8 rounded-full flex items-center justify-center transition active:scale-90"
+                    :class="favoriteIds.has(item.id) ? 'bg-rose-50 text-rose-500' : 'bg-slate-50 text-slate-300 hover:text-slate-400'"
+                    title="Simpan Favorit"
+                  >
+                    <svg class="w-4 h-4" :fill="favoriteIds.has(item.id) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <!-- Symptoms (Gejala) Box in soft Rose/Red -->
               <div class="p-3 bg-rose-50/60 rounded-2xl border border-rose-100/80 text-xs text-rose-900 space-y-0.5">
                 <span class="font-bold text-rose-700 block text-[11px]">⚠️ Gejala Lapangan:</span>
-                <p class="text-slate-700 leading-relaxed">{{ item.symptom }}</p>
+                <p class="text-slate-700 leading-relaxed line-clamp-2">{{ item.symptom }}</p>
               </div>
 
               <!-- Solution (Solusi) Box in soft Emerald/Green -->
               <div class="p-3 bg-emerald-50/60 rounded-2xl border border-emerald-100/80 text-xs text-emerald-900 space-y-0.5 whitespace-pre-line">
                 <span class="font-bold text-emerald-800 block text-[11px]">✅ Penanganan & Dosis Taktis:</span>
-                <p class="text-slate-700 leading-relaxed">{{ item.solution }}</p>
+                <p class="text-slate-700 leading-relaxed line-clamp-2">{{ item.solution }}</p>
               </div>
 
               <!-- Tags Chips -->
@@ -300,23 +335,25 @@
                 </span>
               </div>
 
-              <button
-                v-if="item.recipe"
-                :id="`recipe-toggle-${item.id}`"
-                type="button"
-                class="w-full rounded-2xl bg-violet-50 px-3 py-2 text-left text-xs font-bold text-violet-700 transition hover:bg-violet-100"
-                :aria-expanded="expandedRecipes.has(item.id)"
-                @click="toggleRecipe(item.id)"
-              >
-                🌿 {{ expandedRecipes.has(item.id) ? 'Sembunyikan' : 'Lihat' }} cara meracik
-              </button>
+              <div v-if="item.recipe" class="pt-1" @click.stop>
+                <button
+                  :id="`recipe-toggle-${item.id}`"
+                  type="button"
+                  class="w-full rounded-2xl bg-violet-50 px-3 py-2 text-left text-xs font-bold text-violet-700 transition hover:bg-violet-100 flex items-center justify-between"
+                  :aria-expanded="expandedRecipes.has(item.id)"
+                  @click="toggleRecipe(item.id)"
+                >
+                  <span>🌿 {{ expandedRecipes.has(item.id) ? 'Sembunyikan' : 'Lihat' }} cara meracik jamu</span>
+                  <span class="text-xs">{{ expandedRecipes.has(item.id) ? '▲' : '▼' }}</span>
+                </button>
 
-              <div v-if="item.recipe && expandedRecipes.has(item.id)" class="rounded-2xl border border-violet-100 bg-violet-50/50 p-3 text-xs text-slate-700 space-y-2">
-                <p class="font-bold text-violet-800">{{ item.recipe.name }}</p>
-                <div><strong>Bahan:</strong><ul class="list-disc pl-4"><li v-for="ingredient in item.recipe.ingredients" :key="ingredient">{{ ingredient }}</li></ul></div>
-                <div><strong>Cara membuat:</strong><ol class="list-decimal pl-4"><li v-for="step in item.recipe.steps" :key="step">{{ step }}</li></ol></div>
-                <p><strong>Dosis:</strong> {{ item.recipe.dose }}</p>
-                <p class="font-semibold text-rose-700"><strong>Peringatan:</strong> {{ item.recipe.warning }}</p>
+                <div v-if="expandedRecipes.has(item.id)" class="rounded-2xl border border-violet-100 bg-violet-50/50 p-3 text-xs text-slate-700 space-y-2 mt-2">
+                  <p class="font-bold text-violet-800">{{ item.recipe.name }}</p>
+                  <div><strong>Bahan:</strong><ul class="list-disc pl-4 space-y-0.5 mt-0.5"><li v-for="ingredient in item.recipe.ingredients" :key="ingredient">{{ ingredient }}</li></ul></div>
+                  <div><strong>Cara membuat:</strong><ol class="list-decimal pl-4 space-y-0.5 mt-0.5"><li v-for="step in item.recipe.steps" :key="step">{{ step }}</li></ol></div>
+                  <p><strong>Dosis:</strong> {{ item.recipe.dose }}</p>
+                  <p v-if="item.recipe.warning" class="font-semibold text-rose-700"><strong>Peringatan:</strong> {{ item.recipe.warning }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -326,24 +363,140 @@
             <div class="text-4xl">🔍</div>
             <p class="text-sm font-bold text-slate-700">Tidak ada panduan yang cocok</p>
             <p class="text-xs text-slate-400 max-w-xs mx-auto">
-              Coba kata kunci lain atau pilih salah satu ikon kategori komoditas di atas.
+              {{ onlyFavorites ? 'Belum ada panduan yang ditandai sebagai favorit. Klik ikon hati pada panduan untuk menyimpannya di sini!' : 'Coba kata kunci lain atau pilih salah satu ikon kategori komoditas di atas.' }}
             </p>
+            <button
+              v-if="onlyFavorites || activeCategory !== 'all' || searchQuery"
+              @click="resetFilter"
+              class="mt-2 text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-full hover:bg-brand-100 transition"
+            >
+              Tampilkan Semua Panduan
+            </button>
           </div>
         </div>
 
       </div>
     </ion-content>
+
+    <!-- Detailed Guide Modal / Bottom Sheet -->
+    <Teleport to="body">
+      <div
+        v-if="selectedDetailItem"
+        class="fixed inset-0 z-[200] flex items-end justify-center sm:items-center"
+        @click.self="selectedDetailItem = null"
+      >
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="selectedDetailItem = null" />
+
+        <div class="relative w-full max-w-lg mx-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[85vh] flex flex-col">
+          <!-- Header -->
+          <div class="px-5 pt-4 pb-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">{{ selectedDetailItem.category === 'agri' ? '🌾' : selectedDetailItem.category === 'aqua' ? '🦐' : selectedDetailItem.category === 'herbal' ? '🌿' : '🐄' }}</span>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm leading-tight">{{ selectedDetailItem.title }}</h3>
+                <span class="text-[10px] text-slate-400">{{ getCategoryLabel(selectedDetailItem.category) }}</span>
+              </div>
+            </div>
+            <button
+              @click="selectedDetailItem = null"
+              class="w-8 h-8 rounded-full bg-slate-200/60 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition text-xs font-bold"
+            >
+              ✕
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="p-5 overflow-y-auto space-y-4 text-xs">
+            <!-- Symptoms -->
+            <div class="p-3.5 bg-rose-50/70 rounded-2xl border border-rose-100 text-rose-950 space-y-1">
+              <div class="font-bold text-rose-700 flex items-center gap-1.5 text-xs">
+                <span>⚠️</span> Gejala / Indikasi Lapangan:
+              </div>
+              <p class="text-slate-700 leading-relaxed">{{ selectedDetailItem.symptom }}</p>
+            </div>
+
+            <!-- Solution -->
+            <div class="p-3.5 bg-emerald-50/70 rounded-2xl border border-emerald-100 text-emerald-950 space-y-1">
+              <div class="font-bold text-emerald-800 flex items-center gap-1.5 text-xs">
+                <span>✅</span> Solusi Penanganan & Dosis Taktis:
+              </div>
+              <p class="text-slate-700 leading-relaxed whitespace-pre-line">{{ selectedDetailItem.solution }}</p>
+            </div>
+
+            <!-- Recipe if Herbal -->
+            <div v-if="selectedDetailItem.recipe" class="p-4 bg-violet-50/70 rounded-2xl border border-violet-100 space-y-2.5">
+              <div class="font-bold text-violet-800 flex items-center gap-1.5 text-xs">
+                <span>🌿</span> Resep Ramuan: {{ selectedDetailItem.recipe.name }}
+              </div>
+              <div>
+                <span class="font-bold text-slate-800 block mb-1">Bahan-Bahan yang Dibutuhkan:</span>
+                <ul class="list-disc pl-4 space-y-0.5 text-slate-700">
+                  <li v-for="ing in selectedDetailItem.recipe.ingredients" :key="ing">{{ ing }}</li>
+                </ul>
+              </div>
+              <div>
+                <span class="font-bold text-slate-800 block mb-1">Langkah-Langkah Pembuatan:</span>
+                <ol class="list-decimal pl-4 space-y-0.5 text-slate-700">
+                  <li v-for="st in selectedDetailItem.recipe.steps" :key="st">{{ st }}</li>
+                </ol>
+              </div>
+              <div class="p-2.5 bg-white rounded-xl border border-violet-100">
+                <span class="font-bold text-violet-800">Dosis Pemberian:</span>
+                <p class="text-slate-700 mt-0.5">{{ selectedDetailItem.recipe.dose }}</p>
+              </div>
+              <div v-if="selectedDetailItem.recipe.warning" class="p-2.5 bg-rose-50/80 rounded-xl border border-rose-100 text-rose-800">
+                <span class="font-bold">⚠️ Peringatan Penting:</span>
+                <p class="mt-0.5">{{ selectedDetailItem.recipe.warning }}</p>
+              </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              <span
+                v-for="t in selectedDetailItem.tags"
+                :key="t"
+                class="text-[10px] bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full font-medium"
+              >
+                #{{ t }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="p-4 border-t border-slate-100 bg-white flex gap-2">
+            <button
+              @click="toggleFavorite(selectedDetailItem.id)"
+              class="py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-bold transition active:scale-95 flex items-center gap-1"
+              :class="favoriteIds.has(selectedDetailItem.id) ? 'bg-rose-50 text-rose-600 border-rose-200' : 'bg-slate-50 text-slate-700 hover:bg-slate-100'"
+            >
+              <span>{{ favoriteIds.has(selectedDetailItem.id) ? '★ Tersimpan' : '☆ Simpan Favorit' }}</span>
+            </button>
+            <button
+              @click="onShareItem(selectedDetailItem)"
+              class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-soft transition active:scale-95 flex items-center justify-center gap-1.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              Bagikan Panduan
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </ion-page>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { IonPage, IonContent } from '@ionic/vue';
 import { useRoute } from 'vue-router';
 import AppHeader from '@/components/AppHeader.vue';
 import knowledgeSeedData from '@/data/knowledgeSeed.json';
 import herbalSeedData from '@/data/herbalSeed.json';
 import { searchKnowledge } from '@/services/db';
+import { shareKnowledgeItem } from '@/services/shareService';
+import { triggerHapticImpact, triggerHapticSuccess } from '@/utils/haptics';
 
 const allSeedData = [...knowledgeSeedData, ...herbalSeedData];
 
@@ -351,19 +504,40 @@ const route = useRoute();
 const searchQuery = ref('');
 const activeFilterTag = ref('');
 const activeCategory = ref('all');
+const onlyFavorites = ref(false);
 const filteredList = ref(allSeedData);
 const favoriteIds = ref(new Set([1, 6]));
 const expandedRecipes = ref(new Set());
+const selectedDetailItem = ref(null);
+const toastMessage = ref('');
+
+const displayedList = computed(() => {
+  if (onlyFavorites.value) {
+    return filteredList.value.filter(item => favoriteIds.value.has(item.id));
+  }
+  return filteredList.value;
+});
 
 function toggleFavorite(id) {
+  triggerHapticImpact();
   if (favoriteIds.value.has(id)) {
     favoriteIds.value.delete(id);
+    showToast('Dihapus dari favorit');
   } else {
     favoriteIds.value.add(id);
+    triggerHapticSuccess();
+    showToast('Ditambahkan ke favorit');
   }
 }
 
+function toggleFavoriteFilter() {
+  triggerHapticImpact();
+  onlyFavorites.value = !onlyFavorites.value;
+}
+
 function setFilterTag(tag) {
+  triggerHapticImpact();
+  onlyFavorites.value = false;
   if (activeFilterTag.value === tag) {
     activeFilterTag.value = '';
     searchQuery.value = '';
@@ -375,11 +549,15 @@ function setFilterTag(tag) {
 }
 
 function setCategory(cat) {
+  triggerHapticImpact();
+  onlyFavorites.value = false;
   activeCategory.value = cat;
   performSearch();
 }
 
 function resetFilter() {
+  triggerHapticImpact();
+  onlyFavorites.value = false;
   activeCategory.value = 'all';
   activeFilterTag.value = '';
   searchQuery.value = '';
@@ -387,9 +565,30 @@ function resetFilter() {
 }
 
 function toggleRecipe(id) {
+  triggerHapticImpact();
   if (expandedRecipes.value.has(id)) expandedRecipes.value.delete(id);
   else expandedRecipes.value.add(id);
   expandedRecipes.value = new Set(expandedRecipes.value);
+}
+
+function openDetail(item) {
+  triggerHapticImpact();
+  selectedDetailItem.value = item;
+}
+
+async function onShareItem(item) {
+  triggerHapticImpact();
+  const res = await shareKnowledgeItem(item);
+  if (res && res.message) {
+    showToast(res.message);
+  }
+}
+
+function showToast(msg) {
+  toastMessage.value = msg;
+  setTimeout(() => {
+    toastMessage.value = '';
+  }, 2500);
 }
 
 async function performSearch() {

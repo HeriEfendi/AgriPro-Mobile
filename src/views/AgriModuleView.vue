@@ -63,6 +63,22 @@
               </div>
             </div>
 
+            <!-- Dose Presets Helper -->
+            <div class="space-y-1 pt-0.5">
+              <span class="text-[10px] text-slate-400 block font-medium">Standar dosis per Ha (klik untuk mengisi):</span>
+              <div class="flex flex-wrap gap-1">
+                <button
+                  v-for="preset in dosePresets"
+                  :key="preset.label"
+                  type="button"
+                  @click="applyDosePreset(preset)"
+                  class="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-medium transition active:scale-95 cursor-pointer"
+                >
+                  + {{ preset.label }} ({{ preset.dose }} ml/g)
+                </button>
+              </div>
+            </div>
+
             <!-- Result Box -->
             <div class="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-100/90 text-xs space-y-2">
               <div class="flex justify-between items-center text-emerald-950 font-bold border-b border-emerald-100 pb-2">
@@ -190,6 +206,11 @@
               </div>
             </div>
             
+            <!-- Validation Error Alert -->
+            <div v-if="scheduleError" class="p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-xs font-medium flex items-center gap-2">
+              <span>⚠️</span> {{ scheduleError }}
+            </div>
+            
             <div class="space-y-2.5 text-xs">
               <div>
                 <label class="label-field">Nama Komoditas Tanaman</label>
@@ -202,7 +223,7 @@
                 </div>
                 <div>
                   <label class="label-field">Hari WTH Obat (Hari)</label>
-                  <input v-model.number="wthDays" type="number" placeholder="14" class="input-field" />
+                  <input v-model.number="wthDays" type="number" min="1" placeholder="14" class="input-field" />
                 </div>
               </div>
             </div>
@@ -261,6 +282,22 @@ const areaM2 = ref(1400);
 const tankCapacityL = ref(16);
 const sprayVolumePerHaL = ref(400);
 
+const dosePresets = [
+  { label: 'Padi: Mankozeb', dose: 1500, active: 'Mankozeb' },
+  { label: 'Padi: Imidakloprid', dose: 500, active: 'Imidakloprid' },
+  { label: 'Cabai: Abamektin', dose: 750, active: 'Abamektin' },
+  { label: 'Cabai: Kalsium Semprot', dose: 2000, active: 'Pupuk Daun Tinggi Nitrogen' },
+  { label: 'Jagung: Emamektin', dose: 400, active: 'Emamektin Benzoat' }
+];
+
+function applyDosePreset(preset) {
+  triggerHapticImpact();
+  dosePerHa.value = preset.dose;
+  if (preset.active) {
+    fillIngredient(preset.active);
+  }
+}
+
 const agrimixResult = computed(() => {
   return calculateTankDose(dosePerHa.value || 0, areaM2.value || 0, tankCapacityL.value || 16, sprayVolumePerHaL.value || 400);
 });
@@ -313,15 +350,33 @@ const cropName = ref('Padi Inpari 32');
 const plantDate = ref(new Date().toISOString().substring(0, 10));
 const wthDays = ref(14);
 const scheduleList = ref([]);
+const scheduleError = ref('');
 
 async function loadSchedules() {
   scheduleList.value = await getAllCropSchedules();
 }
 
 async function saveSchedule() {
+  if (!cropName.value || !cropName.value.trim()) {
+    scheduleError.value = 'Nama komoditas tanaman wajib diisi.';
+    triggerHapticImpact();
+    return;
+  }
+  if (!plantDate.value) {
+    scheduleError.value = 'Tanggal tanam wajib ditentukan.';
+    triggerHapticImpact();
+    return;
+  }
+  if (!wthDays.value || wthDays.value < 1) {
+    scheduleError.value = 'Masa WTH harus minimal 1 hari.';
+    triggerHapticImpact();
+    return;
+  }
+  scheduleError.value = '';
+
   await triggerHapticSuccess();
   const newId = await addCropSchedule({
-    crop_name: cropName.value,
+    crop_name: cropName.value.trim(),
     plant_date: plantDate.value,
     wth_days: wthDays.value
   });

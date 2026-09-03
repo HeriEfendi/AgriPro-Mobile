@@ -34,7 +34,7 @@
               </div>
               <div>
                 <label class="label-field">Protein Kasar CP 1 (%)</label>
-                <input v-model.number="cp1" type="number" step="0.1" placeholder="9" class="input-field" />
+                <input v-model.number="cp1" type="number" min="0" step="0.1" placeholder="9" class="input-field" />
               </div>
               <div>
                 <label class="label-field">Bahan 2 (Tinggi CP)</label>
@@ -42,18 +42,34 @@
               </div>
               <div>
                 <label class="label-field">Protein Kasar CP 2 (%)</label>
-                <input v-model.number="cp2" type="number" step="0.1" placeholder="35" class="input-field" />
+                <input v-model.number="cp2" type="number" min="0" step="0.1" placeholder="35" class="input-field" />
+              </div>
+            </div>
+
+            <!-- Feed Presets Helper -->
+            <div class="space-y-1.5 pt-1">
+              <span class="text-[10px] text-slate-400 block font-medium">Bahan pakan populer (klik untuk mengisi):</span>
+              <div class="flex flex-wrap gap-1">
+                <button
+                  v-for="preset in feedPresets"
+                  :key="preset.name"
+                  type="button"
+                  @click="applyPreset(preset)"
+                  class="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-medium transition active:scale-95 cursor-pointer"
+                >
+                  + {{ preset.name }} ({{ preset.cp }}%)
+                </button>
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-xs border-t border-slate-100 pt-3">
               <div>
                 <label class="label-field">Target CP Campuran (%)</label>
-                <input v-model.number="targetCP" type="number" step="0.1" placeholder="16" class="input-field font-bold text-amber-700" />
+                <input v-model.number="targetCP" type="number" min="0" step="0.1" placeholder="16" class="input-field font-bold text-amber-700" />
               </div>
               <div>
                 <label class="label-field">Total Adonan (kg)</label>
-                <input v-model.number="totalBatchKg" type="number" placeholder="100" class="input-field font-bold text-amber-700" />
+                <input v-model.number="totalBatchKg" type="number" min="1" placeholder="100" class="input-field font-bold text-amber-700" />
               </div>
             </div>
 
@@ -92,6 +108,11 @@
                 <h3 class="font-bold text-slate-900 text-sm">Kalender Birahi & Inseminasi Buatan (IB)</h3>
                 <p class="text-[11px] text-slate-400">Prediksi siklus birahi H+21 dan perkiraan tanggal lahir</p>
               </div>
+            </div>
+
+            <!-- Validation Error Alert -->
+            <div v-if="formError" class="p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-xs font-medium flex items-center gap-2">
+              <span>⚠️</span> {{ formError }}
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-xs">
@@ -182,6 +203,27 @@ const cp2 = ref(35);
 const targetCP = ref(16);
 const totalBatchKg = ref(100);
 
+const feedPresets = [
+  { name: 'Jagung Kuning', cp: 8.5 },
+  { name: 'Dedak Padi', cp: 12.0 },
+  { name: 'Bungkil Kelapa Sawit (BKS)', cp: 15.0 },
+  { name: 'Konsentrat Penggemukan', cp: 16.0 },
+  { name: 'Konsentrat Sapi Perah', cp: 18.0 },
+  { name: 'Bungkil Kedelai (SBM)', cp: 44.0 },
+  { name: 'Tepung Ikan', cp: 55.0 }
+];
+
+function applyPreset(preset) {
+  triggerHapticImpact();
+  if (!name1.value || name1.value === preset.name) {
+    name1.value = preset.name;
+    cp1.value = preset.cp;
+  } else {
+    name2.value = preset.name;
+    cp2.value = preset.cp;
+  }
+}
+
 const blendResult = computed(() => {
   return calculatePearsonSquare(
     name1.value || 'Bahan 1',
@@ -198,6 +240,7 @@ const animalTag = ref('Sapi-01');
 const animalType = ref('sapi');
 const ibDate = ref(new Date().toISOString().substring(0, 10));
 const breedingList = ref([]);
+const formError = ref('');
 
 const gestationMap = {
   sapi: 283,
@@ -226,9 +269,21 @@ async function loadBreedingLogs() {
 }
 
 async function saveBreedingLog() {
+  if (!animalTag.value || !animalTag.value.trim()) {
+    formError.value = 'Nomor tag ternak wajib diisi.';
+    triggerHapticImpact();
+    return;
+  }
+  if (!ibDate.value) {
+    formError.value = 'Tanggal Inseminasi Buatan (IB) wajib dipilih.';
+    triggerHapticImpact();
+    return;
+  }
+  formError.value = '';
+
   await triggerHapticSuccess();
   const newId = await addBreedingLog({
-    animal_tag: animalTag.value,
+    animal_tag: animalTag.value.trim(),
     animal_type: animalType.value,
     ib_date: ibDate.value,
     expected_birth_date: expectedBirthDate.value,

@@ -40,32 +40,115 @@
               </div>
               <div>
                 <h3 class="font-bold text-slate-900 text-sm">Catat Parameter Air Hari Ini</h3>
-                <p class="text-[11px] text-slate-400">Simpan ke database lokal Dexie</p>
+                <p class="text-[11px] text-slate-400">Evaluasi instan & simpan ke database lokal</p>
               </div>
+            </div>
+
+            <!-- Instant Water Condition Evaluation Badge -->
+            <div class="p-3.5 rounded-2xl text-xs space-y-1" :class="waterConditionClass">
+              <div class="font-bold flex items-center gap-1.5">
+                <span>{{ waterConditionIcon }}</span>
+                <span>Status Kondisi: {{ waterConditionTitle }}</span>
+              </div>
+              <p class="text-[11px] leading-relaxed">{{ waterConditionAdvice }}</p>
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <label class="label-field">pH Air (6.5 - 8.5)</label>
-                <input v-model.number="phVal" type="number" step="0.1" placeholder="7.5" class="input-field" />
+                <label class="label-field">pH Air (Ideal: 7.2 - 8.2)</label>
+                <input v-model.number="phVal" type="number" min="0" max="14" step="0.1" placeholder="7.5" class="input-field" />
               </div>
               <div>
-                <label class="label-field">Suhu (°C)</label>
-                <input v-model.number="tempVal" type="number" step="0.1" placeholder="28.5" class="input-field" />
+                <label class="label-field">Suhu (°C) (Ideal: 28 - 31)</label>
+                <input v-model.number="tempVal" type="number" min="0" step="0.1" placeholder="28.5" class="input-field" />
               </div>
               <div>
                 <label class="label-field">Salinitas (ppt)</label>
-                <input v-model.number="salinityVal" type="number" placeholder="15" class="input-field" />
+                <input v-model.number="salinityVal" type="number" min="0" placeholder="15" class="input-field" />
               </div>
               <div>
-                <label class="label-field">DO Terlarut (mg/L)</label>
-                <input v-model.number="doVal" type="number" step="0.1" placeholder="5.0" class="input-field" />
+                <label class="label-field">DO Terlarut (Ideal: > 4 mg/L)</label>
+                <input v-model.number="doVal" type="number" min="0" step="0.1" placeholder="5.0" class="input-field" />
               </div>
             </div>
 
             <button @click="saveWaterLog" class="btn-secondary">
               <span>💾</span> Simpan Log Air ke Dexie DB
             </button>
+          </div>
+
+          <!-- Fitur Tambahan: Kalkulator Volume Air Kolam -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-card space-y-3">
+            <div class="flex items-center justify-between cursor-pointer" @click="showVolCalc = !showVolCalc">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl">
+                  📐
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 text-sm">Kalkulator Volume Kolam (m³ & Liter)</h3>
+                  <p class="text-[11px] text-slate-400">Hitung kubikasi air untuk dosis garam & kapur</p>
+                </div>
+              </div>
+              <span class="text-xs text-slate-400 font-bold">{{ showVolCalc ? '▲' : '▼' }}</span>
+            </div>
+
+            <div v-if="showVolCalc" class="pt-2 space-y-3 text-xs border-t border-slate-100">
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  @click="pondShape = 'rect'"
+                  :class="pondShape === 'rect' ? 'bg-teal-600 text-white font-bold' : 'bg-slate-100 text-slate-600'"
+                  class="flex-1 py-1.5 rounded-xl transition text-xs cursor-pointer"
+                >
+                  Kolam Persegi
+                </button>
+                <button
+                  type="button"
+                  @click="pondShape = 'round'"
+                  :class="pondShape === 'round' ? 'bg-teal-600 text-white font-bold' : 'bg-slate-100 text-slate-600'"
+                  class="flex-1 py-1.5 rounded-xl transition text-xs cursor-pointer"
+                >
+                  Kolam Bundar (Bulat)
+                </button>
+              </div>
+
+              <!-- Rect inputs -->
+              <div v-if="pondShape === 'rect'" class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="label-field">Panjang (m)</label>
+                  <input v-model.number="pondLength" type="number" min="0" placeholder="10" class="input-field" />
+                </div>
+                <div>
+                  <label class="label-field">Lebar (m)</label>
+                  <input v-model.number="pondWidth" type="number" min="0" placeholder="5" class="input-field" />
+                </div>
+                <div>
+                  <label class="label-field">Tinggi Air (m)</label>
+                  <input v-model.number="pondDepth" type="number" min="0" step="0.1" placeholder="1" class="input-field" />
+                </div>
+              </div>
+
+              <!-- Round inputs -->
+              <div v-else class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="label-field">Diameter Kolam (m)</label>
+                  <input v-model.number="pondDiameter" type="number" min="0" placeholder="3" class="input-field" />
+                </div>
+                <div>
+                  <label class="label-field">Tinggi Air (m)</label>
+                  <input v-model.number="pondDepth" type="number" min="0" step="0.1" placeholder="1" class="input-field" />
+                </div>
+              </div>
+
+              <!-- Volume Result -->
+              <div class="p-3.5 bg-teal-50/70 rounded-2xl border border-teal-100 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-teal-950 block text-xs">Total Volume Air Kolam:</span>
+                  <span class="text-[10px] text-teal-700">Setara {{ (calculatedVolumeM3 * 1000).toLocaleString('id-ID') }} Liter</span>
+                </div>
+                <span class="text-base font-extrabold text-teal-700">{{ calculatedVolumeM3 }} m³</span>
+              </div>
+            </div>
           </div>
 
           <!-- History Table from Dexie -->
@@ -243,6 +326,84 @@ const tempVal = ref(28.5);
 const salinityVal = ref(15);
 const doVal = ref(5.0);
 const waterLogList = ref([]);
+
+// Pond Volume State
+const showVolCalc = ref(false);
+const pondShape = ref('rect');
+const pondLength = ref(10);
+const pondWidth = ref(5);
+const pondDiameter = ref(3);
+const pondDepth = ref(1.2);
+
+const calculatedVolumeM3 = computed(() => {
+  const depth = Math.max(0, parseFloat(pondDepth.value) || 0);
+  if (pondShape.value === 'rect') {
+    const l = Math.max(0, parseFloat(pondLength.value) || 0);
+    const w = Math.max(0, parseFloat(pondWidth.value) || 0);
+    return Number((l * w * depth).toFixed(2));
+  } else {
+    const d = Math.max(0, parseFloat(pondDiameter.value) || 0);
+    const r = d / 2;
+    return Number((Math.PI * r * r * depth).toFixed(2));
+  }
+});
+
+// Real-Time Water Condition Evaluator
+const waterCondition = computed(() => {
+  const ph = parseFloat(phVal.value) || 7;
+  const doL = parseFloat(doVal.value) || 5;
+  const temp = parseFloat(tempVal.value) || 28;
+
+  if (ph < 6.8) {
+    return {
+      status: 'warning',
+      icon: '⚠️',
+      title: 'Air Asam (pH Drop < 6.8)',
+      advice: 'Tebarkan Kapur Dolomit 10-20 ppm bertahap untuk menstabilkan buffer keasaman kolam.',
+      class: 'bg-amber-50 border border-amber-200 text-amber-900'
+    };
+  }
+  if (ph > 8.5) {
+    return {
+      status: 'warning',
+      icon: '⚠️',
+      title: 'Air Terlalu Basa (pH > 8.5)',
+      advice: 'Waspada ledakan alga (blooming). Berikan molase 2-3 ppm dan perbanyak sirkulasi air segar.',
+      class: 'bg-amber-50 border border-amber-200 text-amber-900'
+    };
+  }
+  if (doL < 4.0) {
+    return {
+      status: 'danger',
+      icon: '🚨',
+      title: 'DO Kritis (< 4.0 mg/L)',
+      advice: 'Oksigen rendah! Segera nyalakan seluruh kincir air 24 jam dan kurangi pakan harian 50%.',
+      class: 'bg-rose-50 border border-rose-200 text-rose-900'
+    };
+  }
+  if (temp < 26 || temp > 32) {
+    return {
+      status: 'warning',
+      icon: '🌡️',
+      title: 'Suhu di Luar Rentang Ideal',
+      advice: 'Suhu optimal udang/ikan: 28-31°C. Atur kedalaman air kolam untuk meredam fluktuasi cuaca.',
+      class: 'bg-amber-50 border border-amber-200 text-amber-900'
+    };
+  }
+
+  return {
+    status: 'optimal',
+    icon: '✅',
+    title: 'Parameter Air Kolam Optimal',
+    advice: 'pH, suhu, dan oksigen terlarut berada dalam batas aman untuk pertumbuhan maksimal komoditas.',
+    class: 'bg-emerald-50 border border-emerald-200 text-emerald-900'
+  };
+});
+
+const waterConditionIcon = computed(() => waterCondition.value.icon);
+const waterConditionTitle = computed(() => waterCondition.value.title);
+const waterConditionAdvice = computed(() => waterCondition.value.advice);
+const waterConditionClass = computed(() => waterCondition.value.class);
 
 async function loadWaterLogs() {
   let logs = await getAllWaterLogs();

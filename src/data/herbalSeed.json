@@ -144,5 +144,233 @@
       "dose": "Oleskan 2–3x sehari",
       "warning": "Jangan gunakan pada luka dalam. Hentikan jika iritasi."
     }
+  },
+  {
+    "id": 30,
+    "category": "herbal",
+    "title": "Daun Sirih Hijau & Merah",
+    "symptom": "Infeksi luka luar, sariawan, borok kulit ternak, atau luka puting ambing perah pasca pemerasan.",
+    "solution": "Manfaat: antiseptik dan bakterisida alami berkat kandungan minyak atsiri chavicol & eugenol.",
+    "tags": [
+      "herbal",
+      "daun sirih",
+      "antiseptik",
+      "luka",
+      "ambing",
+      "disinfektan"
+    ],
+    "parts": "Daun tua segar",
+    "recipe": {
+      "name": "Rebusan Antiseptik Daun Sirih",
+      "ingredients": [
+        "10-15 lembar daun sirih segar",
+        "1 liter air bersih",
+        "1/2 sdt garam krosok"
+      ],
+      "steps": [
+        "Cuci daun sirih di air mengalir.",
+        "Rebus dengan 1 liter air hingga mendidih selama 15 menit.",
+        "Tambahkan sedikit garam, saring, dan dinginkan.",
+        "Gunakan air rebusan untuk mencuci luka atau semprot kandang/puting ambing."
+      ],
+      "dose": "Cuci luka 2x sehari pagi dan sore",
+      "warning": "Hanya untuk aplikasi luar (topikal/cuci), jangan disuntikkan ke pembuluh darah."
+    }
+  },
+  {
+    "id": 31,
+    "category": "herbal",
+    "title": "Daun Pepaya",
+    "symptom": "Ternak kurang nafsu makan, kembung ringan, dan pencegahan cacingan alami pada kambing/sapi/unggas.",
+    "solution": "Manfaat: enzim papain membantu mencerna protein pakan dan merusak kutikula cacing parasit usus.",
+    "tags": [
+      "herbal",
+      "daun pepaya",
+      "nafsu makan",
+      "obat cacing",
+      "kambing",
+      "papain"
+    ],
+    "parts": "Daun segar",
+    "recipe": {
+      "name": "Jus Ekstrak Daun Pepaya Ternak",
+      "ingredients": [
+        "5 lembar daun pepaya tua",
+        "500 ml air hangat",
+        "1 sdm gula merah / molase"
+      ],
+      "steps": [
+        "Tumbuk atau blender daun pepaya dengan air hangat.",
+        "Peras dan saring ampasnya menggunakan kain bersih.",
+        "Campurkan air perasan dengan sedikit gula merah agar rasa pahit disukai ternak.",
+        "Cekokkan ke kambing/sapi atau campurkan ke air minum ayam."
+      ],
+      "dose": "Kambing: 100 ml seminggu sekali; Ayam: 20 ml per liter air minum",
+      "warning": "Hindari pemberian berlebih pada ternak bunting muda trimester pertama."
+    }
+  },
+  {
+    "id": 32,
+    "category": "herbal",
+    "title": "Bawang Putih (Garlic)",
+    "symptom": "Infeksi bakteri Vibrio pada udang, borok lele, nafsu makan ikan menurun, dan diare unggas.",
+    "solution": "Manfaat: allicin merupakan antimikroba dan antiparasit spektrum luas serta imuno-stimulan alami.",
+    "tags": [
+      "herbal",
+      "bawang putih",
+      "allicin",
+      "antibiotik alami",
+      "udang",
+      "ikan"
+    ],
+    "parts": "Umbi siung",
+    "recipe": {
+      "name": "Pasta Bawang Putih Probiotik Pakan",
+      "ingredients": [
+        "50 gram bawang putih kupas",
+        "100 ml air matang",
+        "1 kg pakan pelet ikan / udang",
+        "1 butir putih telur / minyak ikan (perekat)"
+      ],
+      "steps": [
+        "Haluskan bawang putih dengan blender bersama sedikit air.",
+        "Campurkan putih telur atau minyak ikan sebagai perekat (binder).",
+        "Semprotkan atau aduk rata ke butiran pelet pakan.",
+        "Angin-anginkan selama 15 menit di tempat teduh (jangan dijemur panas terik) sebelum ditebar."
+      ],
+      "dose": "Berikan pada sesi makan pagi selama 3-5 hari berturut-turut",
+      "warning": "Jangan disimpan lebih dari 24 jam setelah dicampur pakan basah."
+    }
+  },
+  {
+    "id": 33,
+    "category": "herbal",
+    "title": "Buah Mengkudu / Pace",
+    "symptom": "Daya tahan tubuh ayam/itik menurun di musim pancaroba, kotoran encer keputihan, lemas.",
+    "solution": "Manfaat: scopoletin dan xeronine meningkatkan imunitas, menurunkan tekanan darah, dan bersifat antibakteri.",
+    "tags": [
+      "herbal",
+      "mengkudu",
+      "pace",
+      "unggas",
+      "ayam",
+      "imunitas",
+      "pancaroba"
+    ],
+    "parts": "Buah matang lembek",
+    "recipe": {
+      "name": "Seduhan Mengkudu Unggas Sehat",
+      "ingredients": [
+        "2 buah mengkudu matang",
+        "1 liter air mendidih",
+        "2 sdm gula merah / madu"
+      ],
+      "steps": [
+        "Remas buah mengkudu matang bersih dalam wadah.",
+        "Tuang air panas mendidih dan aduk rata bersama gula merah.",
+        "Tutup rapat dan biarkan dingin selama 2-3 jam.",
+        "Saring cairan dan campurkan ke air minum ternak unggas."
+      ],
+      "dose": "Campur 50 ml larutan mengkudu per 1 liter air minum unggas",
+      "warning": "Gunakan buah yang matang sempurna berwarna kekuningan bening."
+    }
+  },
+  {
+    "id": 34,
+    "category": "herbal",
+    "title": "Daun Kelor (Moringa oleifera)",
+    "symptom": "Produksi susu kambing/sapi perah menurun, masa pemulihan induk pasca melahirkan lambat, anemia.",
+    "solution": "Manfaat: kaya protein daun (27%), kalsium, zat besi, dan vitamin A untuk laktasi dan stamina.",
+    "tags": [
+      "herbal",
+      "daun kelor",
+      "moringa",
+      "laktasi",
+      "sapi perah",
+      "kalsium",
+      "nutrisi"
+    ],
+    "parts": "Daun segar atau tepung kering",
+    "recipe": {
+      "name": "Tepung Pakan Daun Kelor Booster Susu",
+      "ingredients": [
+        "1 kg daun kelor segar",
+        "Dedak padi / konsentrat"
+      ],
+      "steps": [
+        "Petik daun kelor segar dan bersihkan tangkainya.",
+        "Kering-anginkan di dalam ruangan selama 2 hari hingga kering renyah.",
+        "Tumbuk halus menjadi tepung daun kelor.",
+        "Campurkan ke dalam ransum konsentrat pakan harian sebanyak 3-5% dari total ransum."
+      ],
+      "dose": "Campur 100-200 gram tepung kelor per porsi makan harian induk",
+      "warning": "Jangan dikeringkan di bawah sinar matahari langsung agar kandungan vitamin tidak rusak."
+    }
+  },
+  {
+    "id": 35,
+    "category": "herbal",
+    "title": "Meniran Hijau (Phyllanthus niruri)",
+    "symptom": "Ternak rentan terinfeksi virus saat perubahan musim (pancaroba), daya tahan hati & ginjal menurun.",
+    "solution": "Manfaat: zat phyllanthin dan hypophyllanthin berfungsi sebagai imunomodulator dan pelindung hati (hepatoprotektor).",
+    "tags": [
+      "herbal",
+      "meniran",
+      "imunomodulator",
+      "hepatoprotektor",
+      "virus",
+      "hati"
+    ],
+    "parts": "Seluruh herba tanaman (akar, batang, daun)",
+    "recipe": {
+      "name": "Rebusan Herba Meniran Daya Tahan",
+      "ingredients": [
+        "1 genggam herba meniran segar",
+        "800 ml air",
+        "1 ruas temulawak"
+      ],
+      "steps": [
+        "Cuci bersih seluruh tanaman meniran beserta akarnya.",
+        "Rebus bersama irisan temulawak selama 20 menit hingga air tersisa 500 ml.",
+        "Saring dan dinginkan.",
+        "Minumkan ke manusia atau campurkan ke air minum ternak."
+      ],
+      "dose": "Manusia: 1 cangkir 2x sehari; Ternak: 50 ml dicampur air minum",
+      "warning": "Tidak dianjurkan untuk penggunaan terus-menerus lebih dari 2 minggu berturut-turut."
+    }
+  },
+  {
+    "id": 36,
+    "category": "herbal",
+    "title": "Bangle & Kencur",
+    "symptom": "Kembung perut ternak, pegal lemas ayam aduan, batuk pilek, dan pencernaan lesu.",
+    "solution": "Manfaat: zat pedas dan minyak atsiri cineol membuang gas lambung serta menghangatkan tubuh hewan.",
+    "tags": [
+      "herbal",
+      "kencur",
+      "bangle",
+      "kembung",
+      "stamina",
+      "ayam",
+      "angetin"
+    ],
+    "parts": "Rimpang",
+    "recipe": {
+      "name": "Lolohan Jamu Bangle Kencur Stamina",
+      "ingredients": [
+        "2 ruas kencur",
+        "1 ruas bangle",
+        "1 butir kuning telur bebek",
+        "1 sdm madu murni"
+      ],
+      "steps": [
+        "Kupas dan parut kencur serta bangle.",
+        "Peras air sarinya menggunakan kain saring.",
+        "Campurkan air perasan dengan kuning telur dan madu.",
+        "Bentuk bulatan lolohan kecil atau lolohkan langsung ke paruh/mulut ternak."
+      ],
+      "dose": "1 butir lolohan setiap 3 hari sekali atau saat kondisi drop",
+      "warning": "Gunakan rimpang segar berkualitas baik yang tidak berjamur."
+    }
   }
 ]

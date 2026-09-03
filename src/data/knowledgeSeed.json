@@ -94,5 +94,101 @@
     "symptom": "Ambing susu membengkak keras dan panas, susu pecah menggumpal berdarah/bernanah.",
     "solution": "1. Peras susu sampai kosong dan kompres hangat ambing dengan kain bersih.\n2. Salep / kuras intra-mamari antibiotik khusus mastitis sesuai petunjuk vet.\n3. Jaga kebersihan lantai kandang agar selalu kering dan bersih.",
     "tags": ["sapi perah", "kambing etawa", "mastitis", "ambing susu", "bengkak"]
+  },
+  {
+    "id": 18,
+    "category": "agri",
+    "title": "Penyakit Blas Padi (Pyricularia oryzae)",
+    "symptom": "Bercak belah ketupat abu-abu di daun padi, patah tangkai malai (blas leher), bulir padi hampa putih mengering.",
+    "solution": "1. Semprot fungisida berbahan aktif Trisiklazol, Isoprotiolan, atau Difenokonazol pada fase bunting dan 70% malai keluar.\n2. Hindari jarak tanam terlalu rapat, terapkan jajar legowo 2:1 atau 4:1.\n3. Kurangi pemakaian pupuk urea dosis tinggi berlebih pada musim hujan.",
+    "tags": ["padi", "blas padi", "pyricularia", "malai hampa", "fungisida", "trisiklazol"]
+  },
+  {
+    "id": 19,
+    "category": "agri",
+    "title": "Penggerek Batang Padi (Sundep / Beluk)",
+    "symptom": "Fase vegetatif: pucuk daun mati menggulung mudah dicabut (sundep). Fase generatif: malai tegak putih hampa (beluk).",
+    "solution": "1. Pasang perangkap lampu (light trap) di malam hari untuk memantau kupu-kupu ngengat kaper.\n2. Aplikasi insektisida butiran Karbofuran 3G di persemaian atau semprot Klorantraniliprol / Fipronil.\n3. Musnahkan kelompok telur penggerek batang yang menempel di ujung daun bibit sebelum tanam.",
+    "tags": ["padi", "penggerek batang", "sundep", "beluk", "fipronil", "klorantraniliprol"]
+  },
+  {
+    "id": 20,
+    "category": "agri",
+    "title": "Antraknosa / Patek Buah Cabai (Colletotrichum)",
+    "symptom": "Bercak melingkar cekung berair pada buah cabai, warna hitam membusuk kering, buah gugur sebelum matang.",
+    "solution": "1. Semprot fungisida kontak berbahan aktif Mankozeb atau Propineb diselingi sistemik Difenokonazol + Azoksistrobin.\n2. Petik buah yang bergejala patek, masukkan kantong plastik dan bakar jauh dari lahan.\n3. Semprot kalsium nitrat (Ca(NO3)2) seminggu sekali untuk mempertebal dinding sel kulit buah.",
+    "tags": ["cabai", "antraknosa", "patek", "buah busuk", "mankozeb", "azoksistrobin"]
+  },
+  {
+    "id": 21,
+    "category": "agri",
+    "title": "Kutu Kebul & Virus Kuning / Gemini Cabai",
+    "symptom": "Daun cabai mengeriting kaku ke atas, urat daun menguning terang, tanaman kerdil dan gagal berbuah lebat.",
+    "solution": "1. Basmi vektor kutu kebul (Bemisia tabaci) menggunakan insektisida Abamektin, Imidakloprid, atau Diafentiuron sore hari.\n2. Pasang perangkap lekat kuning (yellow sticky trap) 40 lembar per hektar.\n3. Cabut tanaman yang terinfeksi sejak dini agar tidak menulari tanaman lain melalui kutu hisap.",
+    "tags": ["cabai", "virus kuning", "gemini", "kutu kebul", "abamektin", "yellow trap"]
+  },
+  {
+    "id": 22,
+    "category": "agri",
+    "title": "Penyakit Bulai Jagung (Peronosclerospora maydis)",
+    "symptom": "Garis-garis kuning memanjang sejajar tulang daun muda, lapisan serbuk tepung putih di bawah permukaan daun.",
+    "solution": "1. Lakukan perlakuan benih (seed treatment) fungisida Dimetomorf atau Metalaksil sebelum tanam.\n2. Cabut dan musnahkan tanaman yang terinfeksi bulai sebelum spora jamur tertiup angin.\n3. Tanam serentak dalam rentang 10-14 hari di satu hamparan kawasan.",
+    "tags": ["jagung", "bulai", "metalaksil", "dimetomorf", "serbuk putih", "seed treatment"]
+  },
+  {
+    "id": 23,
+    "category": "agri",
+    "title": "Ulat Daun & Ulat Grayak Bawang Merah (Spodoptera exigua)",
+    "symptom": "Daun bawang berlubang tembus pandang seperti selaput putih, di dalam rongga daun terdapat ulat hijau kecil aktif.",
+    "solution": "1. Semprot insektisida berbahan aktif Emamektin Benzoat atau Klorfenapir pada sore menjelang malam hari.\n2. Pasang perangkap feromon exi (feromon seks) untuk memikat dan membasmi ngengat jantan.\n3. Potong ujung daun bawang yang berisi telur atau ulat muda lalu kumpulkan dan bakar.",
+    "tags": ["bawang merah", "ulat grayak", "spodoptera exigua", "emamektin", "klorfenapir"]
+  },
+  {
+    "id": 24,
+    "category": "aqua",
+    "title": "Berak Putih Udang Vaname (White Feces Disease / WFD)",
+    "symptom": "Kotoran feces udang berwarna putih mengapung di permukaan air kolam, usus udang kosong, nafsu makan drop 50%.",
+    "solution": "1. Turunkan feeding rate 30-50% dan lakukan pembersihan siphon dasar kolam secara berkala.\n2. Campurkan pakan dengan probiotik Bacillus sp. + ekstrak bawang putih (allicin) dosis 5-10 g/kg pakan.\n3. Tingkatkan aerasi kincir air dan perbaiki rasio C:N air kolam menggunakan molase / tetes tebu.",
+    "tags": ["udang vaname", "berak putih", "wfd", "feces putih", "probiotik", "molase"]
+  },
+  {
+    "id": 25,
+    "category": "aqua",
+    "title": "Jamur Saprolegnia / Kapas Ikan Lele & Gurami",
+    "symptom": "Gumpalan serabut putih seperti kapas menempel pada luka kulit, sirip, atau telur ikan di kolam budidaya.",
+    "solution": "1. Rendam ikan yang sakit dalam larutan Methylene Blue dosis 2-3 ppm atau garam krosok 1-2% selama 20 menit.\n2. Hindari penanganan ikan yang kasar saat sortasi untuk mencegah luka lecet pada sisik dan kulit.\n3. Naikkan suhu air kolam ke rentang 28-30°C untuk menghambat perkembangbiakan jamur.",
+    "tags": ["ikan lele", "gurami", "jamur saprolegnia", "methylene blue", "garam krosok", "kapas"]
+  },
+  {
+    "id": 26,
+    "category": "aqua",
+    "title": "Parasit Kutu Ikan (Argulus & Lernaea) Ikan Nila / Mas",
+    "symptom": "Kutu berbentuk piringan bulat pipih (Argulus) atau jangkar (Lernaea) menempel menghisap darah, ikan menggesekkan badan ke dinding.",
+    "solution": "1. Cabut kutu jangkar secara mekanis menggunakan pinset bersih jika jumlah ikan terbatas.\n2. Perendaman air garam 20-30 g/liter selama 5 menit atau perlakuan obat anti-parasit diflubenzuron dosis 1 ppm.\n3. Bersihkan endapan lumpur dan keringkan kolam terpal/tanah di bawah terik matahari sebelum tebar ulang.",
+    "tags": ["ikan nila", "ikan mas", "kutu ikan", "argulus", "lernaea", "parasit", "garam"]
+  },
+  {
+    "id": 27,
+    "category": "livestock",
+    "title": "Scabies / Gudik / Korengan Kambing & Kelinci",
+    "symptom": "Kulit moncong, telinga, dan sela kaki berkerak tebal abu-abu keputihan, bulu rontok, hewan terus menggaruk gelisah.",
+    "solution": "1. Suntikkan Ivermectin subkutan (di bawah kulit) dosis 0.2 mg/kg berat badan (ulangi setelah 14 hari).\n2. Mandikan hewan dengan larutan belerang (sulfur) 2% atau salep minyak kelapa + belerang bubuk.\n3. Semprot kandang dengan insektisida disinfektan untuk membasmi tungau Sarcoptes scabiei di kayu kandang.",
+    "tags": ["kambing", "kelinci", "scabies", "gudik", "ivermectin", "belerang", "tungau"]
+  },
+  {
+    "id": 28,
+    "category": "livestock",
+    "title": "Ngorok / CRD (Chronic Respiratory Disease) Unggas Ayam",
+    "symptom": "Ayam bernapas bersuara ngorok basah, keluar lendir dari hidung, mata bengkak berair, nafsu makan menurun drastis.",
+    "solution": "1. Berikan antibiotik Enrofloxacin, Doxycycline, atau Tylosin melalui air minum selama 3-5 hari berturut-turut.\n2. Semprot desinfektan udara kandang dan perbaiki sirkulasi ventilasi agar kadar gas amonia tidak menusuk mata.\n3. Berikan multivitamin elektrolit untuk mempercepat regenerasi epitel saluran pernapasan ayam.",
+    "tags": ["ayam broiler", "ayam petelur", "crd", "ngorok", "doxycycline", "tylosin", "amonia"]
+  },
+  {
+    "id": 29,
+    "category": "livestock",
+    "title": "Cacing Hati (Fascioliasis) Sapi & Kambing",
+    "symptom": "Pembengkakan di bawah rahang bawah (bottle jaw / oedema submandibular), mata pucat anemis, diare kronis, kurus.",
+    "solution": "1. Berikan obat cacing berbahan aktif Triclabendazole atau Closantel dosis sesuai bobot badan ternak.\n2. Hindari memberikan rumput segar basah dari rawa atau persawahan tergenang yang banyak siput perantara Lymnaea.\n3. Jemur atau layukan rumput pakan minimal 4-6 jam di bawah sinar matahari sebelum diberikan ke ternak.",
+    "tags": ["sapi", "kambing", "cacing hati", "fasciola", "bottle jaw", "triclabendazole", "closantel"]
   }
 ]
